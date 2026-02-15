@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+useHead({
+  title: 'Posts',
+})
+</script>
 
 <template>
   <div>
