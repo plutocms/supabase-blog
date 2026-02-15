@@ -6,16 +6,16 @@ const route = useRoute('admin-product-edit-id')
 const items = computed<NavbarAdminActionButtonProps[]>(() => [
   {
     label: 'Create post',
-    icon: 'lucide:plus',
-    to: '/admin/product/new',
-    show: !route.path.startsWith('/admin/product/new'),
+    icon: 'lucide:file-plus-2',
+    to: '/admin/post/new',
+    show: !route.path.startsWith('/admin/post/new'),
   },
 
   {
     label: 'Edit post',
-    icon: 'lucide:pen-line',
-    to: `/admin/product/edit/${route.params.id}`,
-    show: route.path.startsWith('/product/'),
+    icon: 'lucide:file-pen-line',
+    to: `/admin/post/edit/${route.params.id}`,
+    show: route.path.startsWith('/posts/'),
   },
 ])
 </script>
