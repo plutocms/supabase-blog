@@ -4,7 +4,7 @@ const sidebarActions = [
   {
     label: 'Posts',
     href: '/admin/posts',
-    icon: 'lucide:box',
+    icon: 'lucide:file-text',
     onSelect: () => {
       navigateTo('/admin/posts')
     },
