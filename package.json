@@ -1,7 +1,19 @@
 {
-  "name": "supabase-blog",
+  "name": "@plutocms/supabase-blog",
   "type": "module",
-  "private": true,
+  "version": "0.0.0",
+  "description": "Blog dashboard layer for Pluto CMS",
+  "author": "Victor Ribeiro",
+  "license": "MIT",
+  "homepage": "https://github.com/plutocms/supabase-blog#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plutocms/supabase-blog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/plutocms/supabase-blog/issues"
+  },
+  "main": "./nuxt.config.ts",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -10,7 +22,8 @@
     "postinstall": "nuxt prepare",
     "prettier": "prettier --write .",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix && prettier --write ."
+    "lint:fix": "eslint . --fix && prettier --write .",
+    "typecheck": "nuxi typecheck"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^7.4.3",
@@ -19,7 +32,8 @@
     "nuxt": "^4.3.1",
     "prettier": "^3.8.1",
     "vue": "^3.5.28",
-    "vue-router": "^5.0.2"
+    "vue-router": "^5.0.2",
+    "vue-tsc": "^3.3.7"
   },
   "trustedDependencies": [
     "@parcel/watcher"
