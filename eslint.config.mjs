@@ -63,6 +63,7 @@ export default withNuxt(
         {
           arrays: 'always-multiline',
           objects: 'always-multiline',
+          imports: 'always-multiline',
           functions: 'never',
         },
       ],
