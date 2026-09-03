@@ -5,8 +5,8 @@
     "": {
       "name": "supabase-blog",
       "dependencies": {
-        "@plutocms/supabase": "^0.0.1-alpha.17",
-        "@plutocms/supabase-storage": "^0.0.1-alpha.9",
+        "@plutocms/supabase": "^0.1.1",
+        "@plutocms/supabase-storage": "^0.1.0",
         "@plutocms/ui": "^0.1.1",
       },
       "devDependencies": {
@@ -461,15 +461,15 @@
 
     "@pkgr/core": ["@pkgr/core@0.2.9", "", {}, "sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA=="],
 
-    "@plutocms/pluto": ["@plutocms/pluto@0.0.1-alpha.4", "", { "dependencies": { "@plutocms/utils": "^0.0.1-alpha.5", "@vueuse/nuxt": "^14.2.1" } }, "sha512-Z2PKZmgjOsTttIWTBFnO9Eb46FYphA1mSTdEbsSu7i5XEfSMbCeTGGiGf0Vr/BUJnzZj5zZ3xG+outVNVUEtMA=="],
+    "@plutocms/pluto": ["@plutocms/pluto@0.1.0", "", { "dependencies": { "@plutocms/utils": "^0.1.0", "@vueuse/nuxt": "^14.3.0" } }, "sha512-aTl2+fxdrbNHBm2N16w+MMVJEr/HI3UaSON/KXNgetfA5E36qrWVBe/4uMzZ8t4plHM2m2aHNyrHUx05VdsmWw=="],
 
-    "@plutocms/supabase": ["@plutocms/supabase@0.0.1-alpha.17", "", { "dependencies": { "@nuxt/ui": "^4.5.1", "@nuxtjs/supabase": "^2.0.4", "@plutocms/pluto": "^0.0.1-alpha.4", "@plutocms/utils": "^0.0.1-alpha.5", "postgres": "^3.4.8", "supabase": "^2.76.15", "yup": "1.7.1" } }, "sha512-2HlDyuTxGi23Z0ZzLkOKVko97HHzounuxCaMB5WCOuRUltiMlzeKmnO0XVuc8jbq+ikGyO0pya+sw7BJ7DzAwg=="],
+    "@plutocms/supabase": ["@plutocms/supabase@0.1.1", "", { "dependencies": { "@nuxt/ui": "^4.9.0", "@nuxtjs/supabase": "^2.0.9", "@plutocms/pluto": "^0.1.0", "@plutocms/utils": "^0.1.0", "postgres": "^3.4.9", "supabase": "^2.109.1", "yup": "1.7.1" } }, "sha512-8vXfwIlz121AnfTlaK8gYFW8StIO7E475KWLok2d4Fv0uwao9IYUe4+9BEXJYy1RtWriibRSOCa2NFrh74epTg=="],
 
-    "@plutocms/supabase-storage": ["@plutocms/supabase-storage@0.0.1-alpha.9", "", { "dependencies": { "@plutocms/supabase": "^0.0.1-alpha.9", "@plutocms/utils": "^0.0.1-alpha.5" } }, "sha512-ku4xEcCTFU815YWT9hFzL6ZdeMrS5r+jl5jZUDijeo5XhjTxouFpJm+y+/n9vlsafoxPNbJU39Zldk/FvWkrbQ=="],
+    "@plutocms/supabase-storage": ["@plutocms/supabase-storage@0.1.0", "", { "dependencies": { "@plutocms/supabase": "^0.1.1", "@plutocms/utils": "^0.1.0" } }, "sha512-5PG9VWGWnY+YFsKCclS9vlGY4AcToRv9FxZIfyP0b70IE4meKjWa6N3xq5lfrBv6LwNcz/qo6rnRTgkIhVelVQ=="],
 
     "@plutocms/ui": ["@plutocms/ui@0.1.1", "", { "dependencies": { "@nuxt/ui": "^4.5.1" } }, "sha512-oPRQIVU1VkrIX5wtd0ceyySvvYJE0Wy+ayjX0QqffBRQQH4DCq8OaF/iD/QF8U8lc1zPAHAXnNJWXtMJoRsw6g=="],
 
-    "@plutocms/utils": ["@plutocms/utils@0.0.1-alpha.7", "", { "dependencies": { "@nuxt/eslint": "^1.15.2" } }, "sha512-qLWf47vCfntZVj/9VUw7KcJ11wgzP7gw5xEOZreOKvOprz5vYuTWvBN0II8vYBdH++UtNeuXYFj/DsSWj9LqTw=="],
+    "@plutocms/utils": ["@plutocms/utils@0.1.0", "", { "dependencies": { "@nuxt/eslint": "^1.15.2" } }, "sha512-o+9BMLSKA3PjqDD2OM/rIyQ2pCq6iahins+rBxCoehnA38aakoOfSWoQpn3P7h9azj9y3ek9As9f1RvfLsh8uw=="],
 
     "@polka/url": ["@polka/url@1.0.0-next.29", "", {}, "sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww=="],
 
