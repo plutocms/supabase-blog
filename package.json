@@ -23,7 +23,8 @@
     "prettier": "prettier --write .",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix && prettier --write .",
-    "typecheck": "nuxi typecheck"
+    "typecheck": "nuxi typecheck",
+    "test": "vitest run"
   },
   "dependencies": {
     "@plutocms/supabase": "^0.1.1",
@@ -37,6 +38,7 @@
     "eslint": "^10.0.0",
     "nuxt": "^4.3.1",
     "prettier": "^3.8.1",
+    "vitest": "^5.0.0",
     "vue": "^3.5.28",
     "vue-router": "^5.0.2",
     "vue-tsc": "^3.3.7"
