@@ -13,4 +13,6 @@ export default defineNuxtConfig({
   $meta: {
     name: 'supabase-blog',
   },
+
+  css: ['#layers/supabase-blog/app/assets/css/tailwind.css'],
 })

@@ -1,9 +1,12 @@
 <script setup lang="ts">
-useHead({
-  title: 'New Post',
+const form = ref<FormPost>({
+  title: '',
+  slug: '',
+  content: '',
+  status: 'draft',
 })
 </script>
 
 <template>
-  <div>New Post</div>
+  <PostForm v-model="form" />
 </template>

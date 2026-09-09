@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { NavbarAdminActionButtonProps } from '#layers/utils/shared/types/navbar'
 
-const route = useRoute('admin-product-edit-id')
+const route = useRoute()
 
 const items = computed<NavbarAdminActionButtonProps[]>(() => [
   {
@@ -14,8 +14,12 @@ const items = computed<NavbarAdminActionButtonProps[]>(() => [
   {
     label: 'Edit post',
     icon: 'lucide:file-pen-line',
-    to: `/admin/post/edit/${route.params.id}`,
-    show: route.path.startsWith('/posts/'),
+    to: `/admin/post/edit/${
+      ('id' in route.params && route.params.id) ||
+      ('slug' in route.params && route.params.slug) ||
+      ''
+    }`,
+    show: route.path.startsWith('/post/'),
   },
 ])
 </script>
