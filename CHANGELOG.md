@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/plutocms/supabase-blog/compare/v0.1.0...v0.1.1) (2026-09-09)
+
+
+### Bug Fixes
+
+* **deps:** align released Pluto layers ([#11](https://github.com/plutocms/supabase-blog/issues/11)) ([637bcf0](https://github.com/plutocms/supabase-blog/commit/637bcf0bda56004c1420579ee45b686fa6a21f49))
+
 ## 0.1.0 (2026-09-03)
 
 
