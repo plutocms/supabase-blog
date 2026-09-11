@@ -10,7 +10,8 @@ edit, list, and delete blog posts. Each post has a title and a rich text body.
 
 ## The `posts` table
 
-The table lives in `public/schema.supabase-blog.sql`. It has these columns:
+The table is defined in this layer's `db/migrations/` directory (see below). It has these
+columns:
 
 - `id` — bigint. The primary key. The database generates it.
 - `created_at` — timestamptz. The database sets it when a row is created.
@@ -30,13 +31,19 @@ Row Level Security rules:
 
 ### How the migration applies
 
-Nuxt layer `supabase` walks every layer at build time
-(`supabase/modules/pluto-migrations.ts`). It finds each layer's `public/schema.<layer-name>.sql`
-file and loads its SQL into `runtimeConfig.plutoLayerSchemas`. At Nitro startup, a server plugin
-(`supabase/server/plugins/migrations.ts`) runs each layer's SQL once against the database and
-records the run in the `public.pluto_migrations` table, keyed by layer name. So
-`public/schema.supabase-blog.sql` runs once, the first time the app starts against a fresh
-database. It does not run again.
+This layer ships versioned migrations under `db/migrations/`, following the convention
+described in `@plutocms/supabase`'s own `layer-migrations` skill. See that skill for how the
+engine discovers, applies, and records migrations. This layer's migration files, in order:
+
+- `db/migrations/001_baseline.sql` — the `posts` table, its indexes, and the original RLS
+  policies. This is the exact schema released in `v0.1.3`.
+- `db/migrations/002_admin_policies.sql` — hardens the `posts` RLS policies so that reading a
+  draft, and every insert, update, and delete, requires `public.is_admin()`.
+
+`public/schema.supabase-blog.sql` is now a compatibility stub. It stays in place only so a
+site still running `@plutocms/supabase` older than 0.4.0 gets a clear upgrade error instead of
+silently missing this layer's migrations. Remove it one release after 0.4.0 is the floor
+everywhere.
 
 ## Server API routes
 
