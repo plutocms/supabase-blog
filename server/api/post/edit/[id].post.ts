@@ -1,13 +1,13 @@
 import { serverSupabaseClient } from '#supabase/server'
 
 export default defineEventHandler(async (event) => {
+  await requireAdmin(event)
+
   const client = await serverSupabaseClient<BlogDatabase>(event)
   const params = event.context.params
   const body = await readBody<PostInsert>(event)
 
-  if (!body) {
-    throw createError({ statusMessage: 'No payload sent.' })
-  }
+  assertValidPostPayload(body)
 
   if (!params?.id) {
     throw createError({ statusMessage: 'No param sent.' })
