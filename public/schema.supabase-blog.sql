@@ -4,7 +4,7 @@
 
 -- ---------- posts ----------
 
-CREATE TABLE public.posts (
+CREATE TABLE IF NOT EXISTS public.posts (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
@@ -17,8 +17,8 @@ CREATE TABLE public.posts (
   CONSTRAINT posts_status_check CHECK (status IN ('draft', 'published'))
 );
 
-CREATE INDEX idx_posts_status ON public.posts (status);
-CREATE INDEX idx_posts_created_at ON public.posts (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_posts_status ON public.posts (status);
+CREATE INDEX IF NOT EXISTS idx_posts_created_at ON public.posts (created_at DESC);
 
 ALTER TABLE public.posts ENABLE ROW LEVEL SECURITY;
 
