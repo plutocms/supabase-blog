@@ -23,11 +23,17 @@ columns:
 - `published_at` — timestamptz. Null while the post is a draft. The API sets it when a post
   becomes published, and clears it back to null when a post goes back to draft.
 
-Row Level Security rules:
+Row Level Security rules use three named capabilities, checked through
+`public.has_capability(cap)` (from `@plutocms/supabase` 0.7.0+):
 
-- An anonymous visitor (`anon`) reads only rows where `status = 'published'`.
-- A signed-in editor (`authenticated`) reads every row, drafts included.
-- A signed-in editor can insert, update, and delete any row.
+- `posts:read_drafts` — read a row where `status = 'draft'`. An anonymous visitor (`anon`)
+  always reads only rows where `status = 'published'`, capability or not.
+- `posts:publish` — insert a row, or update any row.
+- `posts:delete` — delete any row.
+
+`public.has_capability()` folds in `public.is_admin()`, so an admin holds all three
+capabilities with no extra setup. There is no ownership-scoped capability yet — a holder of
+`posts:publish` can edit every post, not only their own.
 
 ### How the migration applies
 
@@ -39,6 +45,8 @@ engine discovers, applies, and records migrations. This layer's migration files,
   policies. This is the exact schema released in `v0.1.3`.
 - `db/migrations/002_admin_policies.sql` — hardens the `posts` RLS policies so that reading a
   draft, and every insert, update, and delete, requires `public.is_admin()`.
+- `db/migrations/003_capability_policies.sql` — rewrites the same four `posts` RLS policies to
+  the three named capabilities above, instead of `public.is_admin()`.
 
 `public/schema.supabase-blog.sql` is now a compatibility stub. It stays in place only so a
 site still running `@plutocms/supabase` older than 0.4.0 gets a clear upgrade error instead of

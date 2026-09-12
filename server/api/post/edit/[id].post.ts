@@ -1,7 +1,7 @@
 import { serverSupabaseClient } from '#supabase/server'
 
 export default defineEventHandler(async (event) => {
-  await requireAdmin(event)
+  await requireCapability(event, 'posts:publish')
 
   const client = await serverSupabaseClient<BlogDatabase>(event)
   const params = event.context.params

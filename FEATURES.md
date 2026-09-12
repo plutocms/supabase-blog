@@ -8,4 +8,6 @@ policies shared by every project here.
 
 ## Features
 
-- Blog post admin: create, edit, list, and delete posts with a rich text editor. @.claude/skills/blog-posts/SKILL.md
+- Blog post admin: create, edit, list, and delete posts with a rich text editor, gated by the
+  `posts:read_drafts`, `posts:publish`, and `posts:delete` capabilities.
+  @.claude/skills/blog-posts/SKILL.md
