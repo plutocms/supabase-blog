@@ -22,5 +22,10 @@ export default defineNuxtPlugin(() => {
       { id: 'posts', path: '/admin/posts', title: 'Posts', icon: 'lucide:file-text' },
       { id: 'post-new', path: '/admin/post/new', title: 'New post', parent: 'supabase-blog:posts' },
     ],
+    capabilities: [
+      { id: 'posts-read-drafts', key: 'posts:read_drafts', label: 'Read draft posts' },
+      { id: 'posts-publish', key: 'posts:publish', label: 'Create and publish posts' },
+      { id: 'posts-delete', key: 'posts:delete', label: 'Delete posts' },
+    ],
   })
 })
