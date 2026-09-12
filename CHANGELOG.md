@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.0](https://github.com/plutocms/supabase-blog/compare/v0.1.3...v0.2.0) (2026-09-12)
+
+
+### Features
+
+* **migrations:** move to versioned db/migrations layout ([#18](https://github.com/plutocms/supabase-blog/issues/18)) ([3eac117](https://github.com/plutocms/supabase-blog/commit/3eac1177d5188370dc2a9e0e38e67d6c69a7b613))
+
+
+### Bug Fixes
+
+* **deps:** require @plutocms/supabase 0.4.1 and @plutocms/supabase-storage 0.2.0 ([#19](https://github.com/plutocms/supabase-blog/issues/19)) ([186c7e1](https://github.com/plutocms/supabase-blog/commit/186c7e11953ba4e3abd89403459c34202665527d))
+* **posts:** require admin for post mutations and draft reads ([#15](https://github.com/plutocms/supabase-blog/issues/15)) ([440ad2e](https://github.com/plutocms/supabase-blog/commit/440ad2e433d8f1b11fc0fdf9ed71b0b117263860))
+* **schema:** make posts table/index creation idempotent ([#17](https://github.com/plutocms/supabase-blog/issues/17)) ([3892457](https://github.com/plutocms/supabase-blog/commit/38924572c53aac6966ac66e9230c98716e2a6592))
+
 ## [0.1.3](https://github.com/plutocms/supabase-blog/compare/v0.1.2...v0.1.3) (2026-09-10)
 
 
