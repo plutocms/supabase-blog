@@ -55,25 +55,26 @@ everywhere.
 
 ## Server API routes
 
-All routes live under `server/api/post/`. Each one loads a Supabase client typed with
-`BlogDatabase` (see the shim below), from `#supabase/server`.
+The public site reads posts through two hand-written routes under `server/api/post/`,
+unchanged. Each loads a Supabase client typed with `BlogDatabase` (see the shim below), from
+`#supabase/server`.
 
-- `POST /api/post/create` — body: `{ slug, title, content, status }`. Sets `created_at` and
-  `updated_at` to now. Sets `published_at` to now when `status` is `published`, else null.
-  Returns `{ message, statusCode, data }`.
 - `GET /api/post/list` — no body. Returns `{ data }`, every post ordered by `created_at`
   descending (the row-level security rule still hides drafts from an anonymous caller).
 - `GET /api/post/get/:id` — `:id` can be a numeric id or a slug. Returns `{ data }`. Returns a
   404 with the message `Post not found` when no row matches.
-- `POST /api/post/edit/:id` — body: `{ slug, title, content, status }`. Sets `updated_at` to
-  now. Sets `published_at` to now when the new status is `published` and the stored
-  `published_at` is still null. Clears `published_at` to null when the new status is `draft`.
-  Returns `{ message, statusCode, data }`.
-- `DELETE /api/post/delete/:id` — no body. Returns `{ message, statusCode, data }`.
+
+The old hand-written write routes — `POST /api/post/create`, `POST /api/post/edit/:id`,
+`DELETE /api/post/delete/:id` — are gone. The admin UI writes through the generic
+`/api/_pluto/content/post/*` routes instead (see "The admin UI: the `post` content type"
+below). `server/utils/validate-post.ts` (`assertValidPostPayload`), which only those three
+routes called, is gone too.
 
 ## The `usePost` composable
 
-`app/composables/post.ts` exports `usePost(postSlugOrId?)`.
+`app/composables/post.ts` exports `usePost(postSlugOrId?)`. The admin UI does not use it
+anymore (see below) — it stays because `pluto-supabase-blog-template`'s public pages
+(`blog.vue`, `post/[slug].vue`) still call it.
 
 - Call it with no argument to fetch the post list (`GET /api/post/list`).
 - Call it with a slug or id to fetch one post (`GET /api/post/get/:id`).
@@ -81,25 +82,33 @@ All routes live under `server/api/post/`. Each one loads a Supabase client typed
 It returns `{ posts, post, refresh, pending, error }`, and the result is also awaitable (it has
 a `then` method), so `const { post } = await usePost(id)` works.
 
-## Pages and components
+## The admin UI: the `post` content type
 
-- `app/pages/admin/posts.vue` — the post list. Shows a table on desktop and cards on mobile.
-  Each row links to the edit page and offers a delete action through a confirm modal.
-- `app/pages/admin/post/new.vue` — the create page. Renders `PostForm` with an empty form.
-- `app/pages/admin/post/edit/[id].vue` — the edit page. Fetches the post, then renders
-  `PostForm` with the loaded form.
-- `app/components/PostForm.vue` — the two-column form shared by the create and edit pages. The
-  left column holds the title input and the rich text editor. The right column holds a preview
-  link, the save button, the read-only slug display, and the status select.
-- `app/components/PostEditor.vue` — the rich text editor. It wraps `@nuxt/ui`'s `UEditor` with
-  a markdown content type and a toolbar. It also owns the image upload flow (see below).
+`/admin/posts`, `/admin/post/new`, and `/admin/post/edit/:id` no longer run hand-written pages
+and forms. They run `@plutocms/pluto`'s generic content-model admin UI, against one content
+type declared in `shared/content/post.ts`:
 
-These components come from other layers, already auto-imported:
+- `app/pages/admin/posts.vue` renders `<PlutoContentList type="post" />`.
+- `app/pages/admin/post/new.vue` renders `<PlutoContentForm type="post" />`.
+- `app/pages/admin/post/edit/[id].vue` renders `<PlutoContentForm type="post" :id="..." />`.
 
-- `PostTitleInput` — from the `ui` layer.
-- `UploadMedia` — from the `supabase-storage` layer.
-- `AdminView`, `Modal`, `ModalHeader`, `ModalContent`, `ModalFooter` — from the `pluto` layer,
-  through the `supabase` layer.
+`shared/content/post.ts` declares the `title`, `slug`, and `content` fields, the `status`
+workflow (`draft`/`published`, stamping `published_at` the first time a post is published), the
+`created_at`/`updated_at` timestamps, and the three capabilities above. It sets
+`autoRoutes: false` and explicit `basePath`/`newPath`/`editPath` values, so the URLs above never
+changed — see `@plutocms/pluto`'s content-model skill for what every field on a content type
+means, and `@plutocms/supabase`'s content-adapter skill for how a content type maps onto a real
+table.
+
+The old hand-written equivalents — `app/components/PostForm.vue`, and the `PostForm`-rendering
+bodies of the three pages above — are gone. `app/components/PostEditor.vue` (the rich text
+editor, see "Image upload" below) is unchanged, but the generic form does not call it directly:
+`app/components/PlutoRichtextField.vue` adapts `PostEditor.vue`'s plain `v-model` to the
+`field`/`modelValue`/`disabled`/`update:modelValue` contract every content-model field widget
+shares, and is registered for the `richtext` field type in `app/plugins/pluto-extension.ts`.
+
+A post's status has no control in the admin UI yet — a known, accepted gap in
+`@plutocms/pluto`'s generic form, not something this layer works around.
 
 ## Image upload
 

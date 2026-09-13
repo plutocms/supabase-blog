@@ -1,4 +1,6 @@
+import { postType } from '#shared/content/post'
 import NavbarAdminActions from '../components/NavbarAdminActions.vue'
+import PlutoRichtextField from '../components/PlutoRichtextField.vue'
 
 export default defineNuxtPlugin(() => {
   definePlutoExtension({
@@ -27,5 +29,7 @@ export default defineNuxtPlugin(() => {
       { id: 'posts-publish', key: 'posts:publish', label: 'Create and publish posts' },
       { id: 'posts-delete', key: 'posts:delete', label: 'Delete posts' },
     ],
+    contentTypes: [{ id: 'post', type: postType }],
+    contentFieldWidgets: [{ id: 'richtext', fieldType: 'richtext', component: PlutoRichtextField }],
   })
 })

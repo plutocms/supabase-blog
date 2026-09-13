@@ -9,5 +9,6 @@ policies shared by every project here.
 ## Features
 
 - Blog post admin: create, edit, list, and delete posts with a rich text editor, gated by the
-  `posts:read_drafts`, `posts:publish`, and `posts:delete` capabilities.
+  `posts:read_drafts`, `posts:publish`, and `posts:delete` capabilities. The admin UI runs on
+  `@plutocms/pluto`'s generic content-model UI, against the `post` content type.
   @.claude/skills/blog-posts/SKILL.md
