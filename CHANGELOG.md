@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/plutocms/supabase-blog/compare/v0.4.0...v0.5.0) (2026-09-13)
+
+
+### Features
+
+* **posts:** adopt the pluto content model ([#24](https://github.com/plutocms/supabase-blog/issues/24)) ([22052fb](https://github.com/plutocms/supabase-blog/commit/22052fbe288a1c07a5031f80db35d394449e9b48))
+
 ## [0.4.0](https://github.com/plutocms/supabase-blog/compare/v0.3.0...v0.4.0) (2026-09-12)
 
 
