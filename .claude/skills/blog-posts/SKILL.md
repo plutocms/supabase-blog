@@ -82,6 +82,10 @@ anymore (see below) — it stays because `pluto-supabase-blog-template`'s public
 It returns `{ posts, post, refresh, pending, error }`, and the result is also awaitable (it has
 a `then` method), so `const { post } = await usePost(id)` works.
 
+A post's `content` field, as `usePost` returns it, is the raw stored value this editor writes
+(markdown today). `PlutoProse` is the component that turns that value into sanitized, styled
+HTML for display — see the `prose` skill for its full detail.
+
 ## The admin UI: the `post` content type
 
 `/admin/posts`, `/admin/post/new`, and `/admin/post/edit/:id` no longer run hand-written pages
