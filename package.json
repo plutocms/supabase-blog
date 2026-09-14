@@ -37,7 +37,9 @@
     "@tiptap/markdown": "^3.31.2",
     "@tiptap/pm": "^3.31.2",
     "@tiptap/starter-kit": "^3.31.2",
-    "@tiptap/vue-3": "^3.31.2"
+    "@tiptap/vue-3": "^3.31.2",
+    "marked": "^17.0.1",
+    "ultrahtml": "^1.6.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^7.4.3",
