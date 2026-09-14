@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/plutocms/supabase-blog/compare/v0.5.0...v0.5.1) (2026-09-14)
+
+
+### Bug Fixes
+
+* **content:** move postType under shared/utils so cross-layer imports work ([#26](https://github.com/plutocms/supabase-blog/issues/26)) ([d467193](https://github.com/plutocms/supabase-blog/commit/d46719312ac62b0c856010256059591062b4c7b9))
+
 ## [0.5.0](https://github.com/plutocms/supabase-blog/compare/v0.4.0...v0.5.0) (2026-09-13)
 
 
