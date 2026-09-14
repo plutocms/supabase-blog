@@ -1,7 +1,7 @@
 import { defineContentType } from '@plutocms/pluto/shared/utils/content'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-// shared/content/post.ts calls the auto-imported `defineContentType` with
+// shared/utils/content-post.ts calls the auto-imported `defineContentType` with
 // no explicit import, the same way every file in this layer relies on
 // Nuxt's cross-layer shared/utils auto-import (see `definePlutoExtension`
 // in app/plugins/pluto-extension.ts for the same pattern). Plain
@@ -19,13 +19,13 @@ afterEach(() => {
 
 describe('postType', () => {
   it('titleField names a real field', async () => {
-    const { postType } = await import('../shared/content/post')
+    const { postType } = await import('../shared/utils/content-post')
 
     expect(postType.fields.some((field) => field.name === postType.titleField)).toBe(true)
   })
 
   it('slug.field names a field of type "slug"', async () => {
-    const { postType } = await import('../shared/content/post')
+    const { postType } = await import('../shared/utils/content-post')
 
     expect(postType.slug).not.toBe(false)
 
@@ -36,7 +36,7 @@ describe('postType', () => {
   })
 
   it('has no duplicate field names', async () => {
-    const { postType } = await import('../shared/content/post')
+    const { postType } = await import('../shared/utils/content-post')
 
     const names = postType.fields.map((field) => field.name)
 
@@ -44,7 +44,7 @@ describe('postType', () => {
   })
 
   it('declares a non-empty status.values list', async () => {
-    const { postType } = await import('../shared/content/post')
+    const { postType } = await import('../shared/utils/content-post')
 
     expect(postType.status).not.toBe(false)
 
@@ -56,7 +56,7 @@ describe('postType', () => {
   it('defines with no console warnings', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
 
-    await import('../shared/content/post')
+    await import('../shared/utils/content-post')
 
     expect(warn).not.toHaveBeenCalled()
 
