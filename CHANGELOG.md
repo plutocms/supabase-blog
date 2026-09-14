@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/plutocms/supabase-blog/compare/v0.5.1...v0.5.2) (2026-09-14)
+
+
+### Bug Fixes
+
+* **editor:** rebuild post editor on tiptap directly, fix freezes ([173f08a](https://github.com/plutocms/supabase-blog/commit/173f08a4bc32ddb37fd316a33dcce155bb92603e))
+
 ## [0.5.1](https://github.com/plutocms/supabase-blog/compare/v0.5.0...v0.5.1) (2026-09-14)
 
 
