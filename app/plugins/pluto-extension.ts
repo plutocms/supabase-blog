@@ -1,4 +1,3 @@
-import { postType } from '#shared/content/post'
 import NavbarAdminActions from '../components/NavbarAdminActions.vue'
 import PlutoRichtextField from '../components/PlutoRichtextField.vue'
 

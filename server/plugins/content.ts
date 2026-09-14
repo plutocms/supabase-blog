@@ -1,5 +1,3 @@
-import { postType } from '#shared/content/post'
-
 /**
  * Registers the `post` content type with core's generic content routes,
  * at Nitro startup.

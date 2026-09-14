@@ -9,6 +9,23 @@
 // `definePlutoExtension` in `app/plugins/pluto-extension.ts`). This file
 // needs no explicit import for them.
 //
+// This file lives under `shared/utils/`, not a bespoke `shared/content/`
+// folder — that placement is load-bearing, not stylistic. Nuxt's
+// shared-imports auto-import only wires a real runtime import for names
+// under `shared/utils/**` and `shared/types/**`; a value exported from an
+// arbitrary `shared/` subfolder gets a type-only declaration (enough to
+// satisfy `nuxi typecheck`) but no actual import injected into the
+// compiled bundle. That gap only surfaces for a *consumer* extending this
+// layer as a dependency — this layer's own dev server never needs the
+// cross-layer path, so wave 5 shipped `postType` under `shared/content/`
+// and both `server/plugins/content.ts` and `app/plugins/pluto-extension.ts`
+// imported it explicitly via `#shared/content/post`. That alias resolves
+// only to the *top-level app's own* `shared/` folder, never to this
+// layer's, so it broke at Nitro startup ("postType is not defined") for
+// any real site extending this layer instead of running it directly.
+// Moving the file here and dropping the explicit import is the fix,
+// confirmed live against `pluto-supabase-blog-template`.
+//
 // `basePath`/`newPath`/`editPath` point the generic list and form UI at
 // this layer's existing, already-deployed admin URLs
 // (`/admin/posts`, `/admin/post/new`, `/admin/post/edit/:id`) instead of
