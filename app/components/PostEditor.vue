@@ -2,14 +2,26 @@
 import type {
   DropdownMenuItem,
   EditorCustomHandlers,
-  EditorMentionMenuItem,
-  EditorSuggestionMenuItem,
   EditorToolbarItem,
 } from '@nuxt/ui'
 import type { Editor, JSONContent } from '@tiptap/vue-3'
-import { mapEditorItems } from '@nuxt/ui/utils/editor'
-import { upperFirst } from 'scule'
+import theme from '#build/ui/editor'
+import { createHandlers, mapEditorItems } from '@nuxt/ui/utils/editor'
+import { tv } from '@nuxt/ui/utils/tv'
+import Code from '@tiptap/extension-code'
+import Image from '@tiptap/extension-image'
+import Placeholder from '@tiptap/extension-placeholder'
+import { Markdown } from '@tiptap/markdown'
+import StarterKit from '@tiptap/starter-kit'
+import { EditorContent, useEditor } from '@tiptap/vue-3'
+import {
+  bubbleToolbarItems,
+  createBlockMenuItemTree,
+  fixedToolbarItems,
+  suggestionItems,
+} from '../utils/postEditorItems'
 import EditorLinkPopover from './EditorLinkPopover.vue'
+import EditorToolbar from './EditorToolbar.vue'
 
 const props = defineProps<{
   placeholder?: string
@@ -17,8 +29,6 @@ const props = defineProps<{
 }>()
 
 const defaultPlaceholder = 'Write, type \'/\' for commands...'
-
-const editorRef = useTemplateRef('editorRef')
 
 const value = defineModel<string>({ default: '' })
 
@@ -39,339 +49,6 @@ const customHandlers = {
 } satisfies EditorCustomHandlers
 
 type MediaItem = Database['public']['Tables']['media']['Row']
-
-function onInsertMedia(event: MediaItem | MediaItem[] | null) {
-  if (!event) {
-    return
-  }
-
-  const item = Array.isArray(event) ? event[0] : event
-
-  if (!item) {
-    return
-  }
-
-  const src = getMediaUrl(item.name)
-
-  editorRef.value?.editor
-    ?.chain()
-    .focus()
-    .setImage({ src, alt: item.alt ?? undefined })
-    .run()
-
-  isMediaModalOpen.value = false
-}
-
-const fixedToolbarItems = [
-  [
-    {
-      kind: 'undo',
-      icon: 'i-lucide-undo',
-      tooltip: { text: 'Undo' },
-    },
-    {
-      kind: 'redo',
-      icon: 'i-lucide-redo',
-      tooltip: { text: 'Redo' },
-    },
-  ],
-  [
-    {
-      icon: 'i-lucide-heading',
-      tooltip: { text: 'Headings' },
-      content: {
-        align: 'start',
-      },
-      items: [
-        {
-          kind: 'heading',
-          level: 1,
-          icon: 'i-lucide-heading-1',
-          label: 'Heading 1',
-        },
-        {
-          kind: 'heading',
-          level: 2,
-          icon: 'i-lucide-heading-2',
-          label: 'Heading 2',
-        },
-        {
-          kind: 'heading',
-          level: 3,
-          icon: 'i-lucide-heading-3',
-          label: 'Heading 3',
-        },
-        {
-          kind: 'heading',
-          level: 4,
-          icon: 'i-lucide-heading-4',
-          label: 'Heading 4',
-        },
-      ],
-    },
-    {
-      icon: 'i-lucide-list',
-      tooltip: { text: 'Lists' },
-      content: {
-        align: 'start',
-      },
-      items: [
-        {
-          kind: 'bulletList',
-          icon: 'i-lucide-list',
-          label: 'Bullet List',
-        },
-        {
-          kind: 'orderedList',
-          icon: 'i-lucide-list-ordered',
-          label: 'Ordered List',
-        },
-      ],
-    },
-    {
-      kind: 'blockquote',
-      icon: 'i-lucide-text-quote',
-      tooltip: { text: 'Blockquote' },
-    },
-    {
-      kind: 'codeBlock',
-      icon: 'i-lucide-square-code',
-      tooltip: { text: 'Code Block' },
-    },
-  ],
-  [
-    {
-      kind: 'mark',
-      mark: 'bold',
-      icon: 'i-lucide-bold',
-      tooltip: { text: 'Bold' },
-    },
-    {
-      kind: 'mark',
-      mark: 'italic',
-      icon: 'i-lucide-italic',
-      tooltip: { text: 'Italic' },
-    },
-    {
-      kind: 'mark',
-      mark: 'underline',
-      icon: 'i-lucide-underline',
-      tooltip: { text: 'Underline' },
-    },
-    {
-      kind: 'mark',
-      mark: 'strike',
-      icon: 'i-lucide-strikethrough',
-      tooltip: { text: 'Strikethrough' },
-    },
-    {
-      kind: 'mark',
-      mark: 'code',
-      icon: 'i-lucide-code',
-      tooltip: { text: 'Code' },
-    },
-  ],
-  [
-    {
-      slot: 'link' as const,
-      icon: 'i-lucide-link',
-    },
-    {
-      kind: 'imageUpload',
-      icon: 'i-lucide-image',
-      tooltip: { text: 'Image' },
-    },
-  ],
-  [
-    {
-      icon: 'i-lucide-align-justify',
-      tooltip: { text: 'Text Align' },
-      content: {
-        align: 'end',
-      },
-      items: [
-        {
-          kind: 'textAlign',
-          align: 'left',
-          icon: 'i-lucide-align-left',
-          label: 'Align Left',
-        },
-        {
-          kind: 'textAlign',
-          align: 'center',
-          icon: 'i-lucide-align-center',
-          label: 'Align Center',
-        },
-        {
-          kind: 'textAlign',
-          align: 'right',
-          icon: 'i-lucide-align-right',
-          label: 'Align Right',
-        },
-        {
-          kind: 'textAlign',
-          align: 'justify',
-          icon: 'i-lucide-align-justify',
-          label: 'Align Justify',
-        },
-      ],
-    },
-  ],
-] satisfies EditorToolbarItem<typeof customHandlers>[][]
-
-const bubbleToolbarItems = computed(
-  () =>
-    [
-      [
-        {
-          label: 'Turn into',
-          trailingIcon: 'i-lucide-chevron-down',
-          activeColor: 'neutral',
-          activeVariant: 'ghost',
-          tooltip: { text: 'Turn into' },
-          content: {
-            align: 'start',
-          },
-          ui: {
-            label: 'text-xs',
-          },
-          items: [
-            {
-              type: 'label',
-              label: 'Turn into',
-            },
-            {
-              kind: 'paragraph',
-              label: 'Paragraph',
-              icon: 'i-lucide-type',
-            },
-            {
-              kind: 'heading',
-              level: 1,
-              icon: 'i-lucide-heading-1',
-              label: 'Heading 1',
-            },
-            {
-              kind: 'heading',
-              level: 2,
-              icon: 'i-lucide-heading-2',
-              label: 'Heading 2',
-            },
-            {
-              kind: 'heading',
-              level: 3,
-              icon: 'i-lucide-heading-3',
-              label: 'Heading 3',
-            },
-            {
-              kind: 'heading',
-              level: 4,
-              icon: 'i-lucide-heading-4',
-              label: 'Heading 4',
-            },
-            {
-              kind: 'bulletList',
-              icon: 'i-lucide-list',
-              label: 'Bullet List',
-            },
-            {
-              kind: 'orderedList',
-              icon: 'i-lucide-list-ordered',
-              label: 'Ordered List',
-            },
-            {
-              kind: 'blockquote',
-              icon: 'i-lucide-text-quote',
-              label: 'Blockquote',
-            },
-            {
-              kind: 'codeBlock',
-              icon: 'i-lucide-square-code',
-              label: 'Code Block',
-            },
-          ],
-        },
-      ],
-      [
-        {
-          kind: 'mark',
-          mark: 'bold',
-          icon: 'i-lucide-bold',
-          tooltip: { text: 'Bold' },
-        },
-        {
-          kind: 'mark',
-          mark: 'italic',
-          icon: 'i-lucide-italic',
-          tooltip: { text: 'Italic' },
-        },
-        {
-          kind: 'mark',
-          mark: 'underline',
-          icon: 'i-lucide-underline',
-          tooltip: { text: 'Underline' },
-        },
-        {
-          kind: 'mark',
-          mark: 'strike',
-          icon: 'i-lucide-strikethrough',
-          tooltip: { text: 'Strikethrough' },
-        },
-        {
-          kind: 'mark',
-          mark: 'code',
-          icon: 'i-lucide-code',
-          tooltip: { text: 'Code' },
-        },
-      ],
-      [
-        {
-          slot: 'link' as const,
-          icon: 'i-lucide-link',
-        },
-        {
-          kind: 'imageUpload',
-          icon: 'i-lucide-image',
-          tooltip: { text: 'Image' },
-        },
-      ],
-      [
-        {
-          icon: 'i-lucide-align-justify',
-          tooltip: { text: 'Text Align' },
-          content: {
-            align: 'end',
-          },
-          items: [
-            {
-              kind: 'textAlign',
-              align: 'left',
-              icon: 'i-lucide-align-left',
-              label: 'Align Left',
-            },
-            {
-              kind: 'textAlign',
-              align: 'center',
-              icon: 'i-lucide-align-center',
-              label: 'Align Center',
-            },
-            {
-              kind: 'textAlign',
-              align: 'right',
-              icon: 'i-lucide-align-right',
-              label: 'Align Right',
-            },
-            {
-              kind: 'textAlign',
-              align: 'justify',
-              icon: 'i-lucide-align-justify',
-              label: 'Align Justify',
-            },
-          ],
-        },
-      ],
-    ] satisfies EditorToolbarItem<typeof customHandlers>[][]
-)
 
 function imageToolbarItems(editor: Editor): EditorToolbarItem[][] {
   const node = editor.state.doc.nodeAt(editor.state.selection.from)
@@ -435,336 +112,294 @@ const selectedNode = ref<{
   pos: number
 }>()
 
-function handleItems(editor: Editor): DropdownMenuItem[][] {
+// The drag-handle's block-menu items. `editor.isActive(...)`/`editor.can()`
+// run inside `mapEditorItems`, so this must never be called from a template
+// expression or a computed — see `useEditorSnapshot.ts` for why. Instead,
+// plain callbacks rebuild it: the drag handle's own `node-change` event,
+// and the dropdown's `update:open` event (in case the dropdown opens before
+// a node-change fires for the block under it).
+const blockMenuItems = shallowRef<DropdownMenuItem[][]>([])
+
+function rebuildBlockMenu(editor: Editor) {
   if (!selectedNode.value?.node?.type) {
-    return []
+    blockMenuItems.value = []
+    return
   }
 
-  return mapEditorItems(
+  blockMenuItems.value = mapEditorItems(
     editor,
-    [
-      [
-        {
-          type: 'label',
-          label: upperFirst(selectedNode.value.node.type),
-        },
-        {
-          label: 'Turn into',
-          icon: 'i-lucide-repeat-2',
-          children: [
-            { kind: 'paragraph', label: 'Paragraph', icon: 'i-lucide-type' },
-            {
-              kind: 'heading',
-              level: 1,
-              label: 'Heading 1',
-              icon: 'i-lucide-heading-1',
-            },
-            {
-              kind: 'heading',
-              level: 2,
-              label: 'Heading 2',
-              icon: 'i-lucide-heading-2',
-            },
-            {
-              kind: 'heading',
-              level: 3,
-              label: 'Heading 3',
-              icon: 'i-lucide-heading-3',
-            },
-            {
-              kind: 'heading',
-              level: 4,
-              label: 'Heading 4',
-              icon: 'i-lucide-heading-4',
-            },
-            { kind: 'bulletList', label: 'Bullet List', icon: 'i-lucide-list' },
-            {
-              kind: 'orderedList',
-              label: 'Ordered List',
-              icon: 'i-lucide-list-ordered',
-            },
-            {
-              kind: 'blockquote',
-              label: 'Blockquote',
-              icon: 'i-lucide-text-quote',
-            },
-            {
-              kind: 'codeBlock',
-              label: 'Code Block',
-              icon: 'i-lucide-square-code',
-            },
-          ],
-        },
-        {
-          kind: 'clearFormatting',
-          pos: selectedNode.value?.pos,
-          label: 'Reset formatting',
-          icon: 'i-lucide-rotate-ccw',
-        },
-      ],
-      [
-        {
-          kind: 'duplicate',
-          pos: selectedNode.value?.pos,
-          label: 'Duplicate',
-          icon: 'i-lucide-copy',
-        },
-        {
-          label: 'Copy to clipboard',
-          icon: 'i-lucide-clipboard',
-          onSelect: async () => {
-            if (!selectedNode.value) {
-              return
-            }
-
-            const pos = selectedNode.value.pos
-            const node = editor.state.doc.nodeAt(pos)
-            if (node) {
-              await navigator.clipboard.writeText(node.textContent)
-            }
-          },
-        },
-      ],
-      [
-        {
-          kind: 'moveUp',
-          pos: selectedNode.value?.pos,
-          label: 'Move up',
-          icon: 'i-lucide-arrow-up',
-        },
-        {
-          kind: 'moveDown',
-          pos: selectedNode.value?.pos,
-          label: 'Move down',
-          icon: 'i-lucide-arrow-down',
-        },
-      ],
-      [
-        {
-          kind: 'delete',
-          pos: selectedNode.value?.pos,
-          label: 'Delete',
-          icon: 'i-lucide-trash',
-        },
-      ],
-    ],
+    createBlockMenuItemTree(editor, selectedNode.value),
     customHandlers
   ) as DropdownMenuItem[][]
 }
 
-const suggestionItems = [
-  [
-    {
-      type: 'label',
-      label: 'Style',
-    },
-    {
-      kind: 'paragraph',
-      label: 'Paragraph',
-      icon: 'i-lucide-type',
-    },
-    {
-      kind: 'heading',
-      level: 1,
-      label: 'Heading 1',
-      icon: 'i-lucide-heading-1',
-    },
-    {
-      kind: 'heading',
-      level: 2,
-      label: 'Heading 2',
-      icon: 'i-lucide-heading-2',
-    },
-    {
-      kind: 'heading',
-      level: 3,
-      label: 'Heading 3',
-      icon: 'i-lucide-heading-3',
-    },
-    {
-      kind: 'bulletList',
-      label: 'Bullet List',
-      icon: 'i-lucide-list',
-    },
-    {
-      kind: 'orderedList',
-      label: 'Numbered List',
-      icon: 'i-lucide-list-ordered',
-    },
-    {
-      kind: 'blockquote',
-      label: 'Blockquote',
-      icon: 'i-lucide-text-quote',
-    },
-    {
-      kind: 'codeBlock',
-      label: 'Code Block',
-      icon: 'i-lucide-square-code',
-    },
-  ],
-  [
-    {
-      type: 'label',
-      label: 'Insert',
-    },
-    {
-      kind: 'mention',
-      label: 'Mention',
-      icon: 'i-lucide-at-sign',
-    },
-    {
-      kind: 'emoji',
-      label: 'Emoji',
-      icon: 'i-lucide-smile-plus',
-    },
-    {
-      kind: 'imageUpload',
-      label: 'Image',
-      icon: 'i-lucide-image',
-    },
-    {
-      kind: 'horizontalRule',
-      label: 'Horizontal Rule',
-      icon: 'i-lucide-separator-horizontal',
-    },
-  ],
-] satisfies EditorSuggestionMenuItem<typeof customHandlers>[][]
+const ui = computed(() =>
+  tv({ extend: theme })({ placeholderMode: 'everyLine' })
+)
 
-const mentionItems: EditorMentionMenuItem[] = [
-  {
-    label: 'benjamincanac',
-    avatar: { src: 'https://avatars.githubusercontent.com/u/739984?v=4' },
+const editorProps = {
+  attributes: {
+    autocomplete: 'off',
+    autocorrect: 'off',
+    autocapitalize: 'off',
+    class: ui.value.base({ class: props.ui?.base ?? 'p-8 sm:px-16 py-13.5' }),
   },
-  {
-    label: 'HugoRCD',
-    avatar: { src: 'https://avatars.githubusercontent.com/u/71938701?v=4' },
-  },
-  {
-    label: 'romhml',
-    avatar: { src: 'https://avatars.githubusercontent.com/u/25613751?v=4' },
-  },
-  {
-    label: 'sandros94',
-    avatar: { src: 'https://avatars.githubusercontent.com/u/13056429?v=4' },
-  },
-  {
-    label: 'hywax',
-    avatar: { src: 'https://avatars.githubusercontent.com/u/149865959?v=4' },
-  },
-  {
-    label: 'J-Michalek',
-    avatar: { src: 'https://avatars.githubusercontent.com/u/71264422?v=4' },
-  },
-  {
-    label: 'genu',
-    avatar: { src: 'https://avatars.githubusercontent.com/u/928780?v=4' },
-  },
+}
+
+const extensions = [
+  Markdown.configure({ markedOptions: { gfm: true } }),
+  StarterKit.configure({
+    code: false,
+    horizontalRule: false,
+    dropcursor: { color: 'var(--ui-primary)', width: 2 },
+    link: { openOnClick: false },
+  }),
+  Code.extend({ excludes: 'code' }),
+  Image,
+  Placeholder.configure({
+    placeholder: props.placeholder ?? defaultPlaceholder,
+    showOnlyWhenEditable: false,
+    showOnlyCurrent: true,
+  }),
 ]
+
+// The markdown-at-the-boundary sync.
+//
+// The document lives as native ProseMirror state while the user types.
+// `getMarkdown()` serializes the whole document, so it must never run on
+// every keystroke — that is what froze the page under fast typing or a
+// held backspace with the old editor. Instead, `onUpdate` only marks the
+// document dirty, and a debounce timer (or a blur) does the real
+// serialization later.
+let lastEmitted = value.value ?? ''
+let dirty = false
+let flushTimer: ReturnType<typeof setTimeout> | undefined
+
+// `flush` and `scheduleFlush` must be declared before `useEditor()` — see
+// the note above `onBeforeUnmount`. They still reference `editor` (defined
+// below), which is safe: neither function runs until after `useEditor()`
+// has returned, since Vue only calls `onUpdate`/`onBlur`/the unmount hook
+// once the editor exists.
+/* eslint-disable ts/no-use-before-define -- forward reference is safe, see comment above */
+function flush() {
+  if (!editor.value || editor.value.isDestroyed || !dirty) {
+    return
+  }
+  dirty = false
+  let markdown: string
+  try {
+    markdown = editor.value.getMarkdown()
+  } catch {
+    markdown = editor.value.getText()
+  }
+  if (markdown === lastEmitted) {
+    return
+  }
+  lastEmitted = markdown
+  value.value = markdown
+}
+
+function scheduleFlush() {
+  clearTimeout(flushTimer)
+  flushTimer = setTimeout(flush, 400)
+}
+/* eslint-enable ts/no-use-before-define -- see note above flush() */
+
+// Register before useEditor() so this unmount hook runs before the one
+// useEditor() registers internally to destroy the editor (Vue runs
+// onBeforeUnmount hooks in registration order).
+onBeforeUnmount(() => {
+  clearTimeout(flushTimer)
+  flush()
+})
+
+const editor = useEditor({
+  extensions,
+  editorProps,
+  autofocus: false,
+  onCreate: ({ editor }) => {
+    if (value.value) {
+      editor.commands.setContent(value.value, {
+        contentType: 'markdown',
+        emitUpdate: false,
+      })
+      lastEmitted = value.value
+    }
+    if (props.placeholder !== undefined) {
+      editor.view.dispatch(editor.state.tr) // force placeholder decoration, mirrors Editor.vue's own onCreate
+    }
+  },
+  onUpdate: ({ transaction, appendedTransactions }) => {
+    if (
+      !transaction.docChanged &&
+      !appendedTransactions.some((tr) => tr.docChanged)
+    ) {
+      return
+    }
+    dirty = true
+    scheduleFlush()
+  },
+  onBlur: () => {
+    clearTimeout(flushTimer)
+    flush()
+  },
+})
+
+function onInsertMedia(event: MediaItem | MediaItem[] | null) {
+  if (!event) {
+    return
+  }
+
+  const item = Array.isArray(event) ? event[0] : event
+
+  if (!item) {
+    return
+  }
+
+  const src = getMediaUrl(item.name)
+
+  editor.value
+    ?.chain()
+    .focus()
+    .setImage({ src, alt: item.alt ?? undefined })
+    .run()
+
+  isMediaModalOpen.value = false
+}
+
+watch(value, (incoming) => {
+  if (!editor.value || editor.value.isDestroyed) {
+    return
+  }
+  const next = incoming ?? ''
+  if (next === lastEmitted) {
+    return // our own echo (flush() or blur already set this) — ignore, do NOT re-serialize to check
+  }
+  clearTimeout(flushTimer)
+  dirty = false
+  lastEmitted = next
+  const pos = editor.value.state.selection.from
+  editor.value.commands.setContent(next, {
+    contentType: 'markdown',
+    emitUpdate: false,
+  })
+  if (pos <= editor.value.state.doc.content.size) {
+    editor.value.commands.setTextSelection(pos)
+  }
+})
+
+const handlers = computed(() => ({ ...createHandlers(), ...customHandlers }))
+provide('editorHandlers', handlers)
 </script>
 
 <template>
-  <UEditor
-    ref="editorRef"
-    v-model="value"
-    v-slot="{ editor, handlers }"
-    :handlers="customHandlers"
-    :ui="props.ui ?? { base: 'p-8 sm:px-16 py-13.5' }"
-    :placeholder="props.placeholder ?? defaultPlaceholder"
-    content-type="markdown"
-    class="w-full"
-  >
-    <UEditorToolbar
-      :editor="editor"
-      :items="fixedToolbarItems"
-      class="border-b border-muted sticky top-0 inset-x-0 px-8 py-2 z-50 bg-default overflow-x-auto"
-    >
-      <template #link>
-        <EditorLinkPopover :editor="editor" auto-open />
-      </template>
-    </UEditorToolbar>
+  <div :class="ui.root({ class: props.ui?.root })">
+    <template v-if="editor">
+      <EditorToolbar
+        :editor="editor"
+        :items="fixedToolbarItems"
+        class="border-b border-muted sticky top-0 inset-x-0 px-8 py-2 z-50 bg-default overflow-x-auto"
+      >
+        <template #link>
+          <EditorLinkPopover :editor="editor" auto-open />
+        </template>
+      </EditorToolbar>
 
-    <UEditorToolbar
-      :editor="editor"
-      :items="bubbleToolbarItems"
-      :should-show="
-        ({ editor, view, state }) => {
-          if (editor.isActive('imageUpload') || editor.isActive('image')) {
-            return false
-          }
-          const { selection } = state
-          return view.hasFocus() && !selection.empty
-        }
-      "
-      layout="bubble"
-    >
-      <template #link>
-        <EditorLinkPopover :editor="editor" />
-      </template>
-    </UEditorToolbar>
-
-    <UEditorToolbar
-      :editor="editor"
-      :items="imageToolbarItems(editor)"
-      :should-show="
-        ({ editor, view }) => {
-          return editor.isActive('image') && view.hasFocus()
-        }
-      "
-      layout="bubble"
-    />
-
-    <UEditorDragHandle
-      v-slot="{ ui: dragHandleUi, onClick }"
-      :editor="editor"
-      @node-change="selectedNode = $event"
-    >
-      <UButton
-        :class="dragHandleUi.handle()"
-        icon="i-lucide-plus"
-        color="neutral"
-        variant="ghost"
-        size="sm"
-        @click="
-          (e) => {
-            e.stopPropagation()
-
-            const selected = onClick()
-            handlers.suggestion?.execute(editor, { pos: selected?.pos }).run()
+      <EditorToolbar
+        :editor="editor"
+        :items="bubbleToolbarItems"
+        :should-show="
+          ({ editor, view, state }) => {
+            if (editor.isActive('imageUpload') || editor.isActive('image')) {
+              return false
+            }
+            const { selection } = state
+            return view.hasFocus() && !selection.empty
           }
         "
+        layout="bubble"
+      >
+        <template #link>
+          <EditorLinkPopover :editor="editor" />
+        </template>
+      </EditorToolbar>
+
+      <EditorToolbar
+        :editor="editor"
+        :items="imageToolbarItems"
+        :should-show="
+          ({ editor, view }) => {
+            return editor.isActive('image') && view.hasFocus()
+          }
+        "
+        layout="bubble"
       />
 
-      <UDropdownMenu
-        v-slot="{ open }"
-        :modal="false"
-        :items="handleItems(editor)"
-        :content="{ side: 'left' }"
-        :ui="{ content: 'w-48', label: 'text-xs' }"
-        @update:open="editor.chain().setMeta('lockDragHandle', $event).run()"
+      <UEditorDragHandle
+        v-slot="{ ui: dragHandleUi, onClick }"
+        :editor="editor"
+        @node-change="
+          (event) => {
+            selectedNode = event
+            if (!editor) return
+            rebuildBlockMenu(editor)
+          }
+        "
       >
         <UButton
-          :active="open"
           :class="dragHandleUi.handle()"
+          icon="i-lucide-plus"
           color="neutral"
           variant="ghost"
-          active-variant="soft"
           size="sm"
-          icon="i-lucide-grip-vertical"
-        />
-      </UDropdownMenu>
-    </UEditorDragHandle>
+          @click="
+            (e) => {
+              e.stopPropagation()
 
-    <UEditorSuggestionMenu :editor="editor" :items="suggestionItems" />
-    <UEditorMentionMenu :editor="editor" :items="mentionItems" />
-  </UEditor>
+              if (!editor) return
+
+              const selected = onClick()
+              handlers.suggestion?.execute(editor, { pos: selected?.pos }).run()
+            }
+          "
+        />
+
+        <UDropdownMenu
+          v-slot="{ open }"
+          :modal="false"
+          :items="blockMenuItems"
+          :content="{ side: 'left' }"
+          :ui="{ content: 'w-48', label: 'text-xs' }"
+          @update:open="
+            (isOpen) => {
+              if (!editor) return
+              editor.chain().setMeta('lockDragHandle', isOpen).run()
+              if (isOpen) rebuildBlockMenu(editor)
+            }
+          "
+        >
+          <UButton
+            :active="open"
+            :class="dragHandleUi.handle()"
+            color="neutral"
+            variant="ghost"
+            active-variant="soft"
+            size="sm"
+            icon="i-lucide-grip-vertical"
+          />
+        </UDropdownMenu>
+      </UEditorDragHandle>
+
+      <UEditorSuggestionMenu :editor="editor" :items="suggestionItems" />
+
+      <EditorContent
+        :editor="editor"
+        :class="ui.content({ class: props.ui?.content })"
+        role="presentation"
+        data-slot="content"
+      />
+    </template>
+  </div>
 
   <UploadMedia v-model="isMediaModalOpen" @insert="onInsertMedia" />
 </template>
-
-<style>
-html.dark .tiptap .shiki,
-html.dark .tiptap .shiki span {
-  color: var(--shiki-dark) !important;
-  background-color: var(--ui-bg-muted) !important;
-}
-</style>

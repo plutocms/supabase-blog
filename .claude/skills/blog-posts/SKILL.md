@@ -102,10 +102,46 @@ table.
 
 The old hand-written equivalents — `app/components/PostForm.vue`, and the `PostForm`-rendering
 bodies of the three pages above — are gone. `app/components/PostEditor.vue` (the rich text
-editor, see "Image upload" below) is unchanged, but the generic form does not call it directly:
-`app/components/PlutoRichtextField.vue` adapts `PostEditor.vue`'s plain `v-model` to the
-`field`/`modelValue`/`disabled`/`update:modelValue` contract every content-model field widget
-shares, and is registered for the `richtext` field type in `app/plugins/pluto-extension.ts`.
+editor, see "The rich text editor" and "Image upload" below) keeps its plain `v-model` contract,
+but the generic form does not call it directly: `app/components/PlutoRichtextField.vue` adapts
+that `v-model` to the `field`/`modelValue`/`disabled`/`update:modelValue` contract every
+content-model field widget shares, and is registered for the `richtext` field type in
+`app/plugins/pluto-extension.ts`.
+
+## The rich text editor
+
+`app/components/PostEditor.vue` builds a `@tiptap/vue-3` editor directly, with `useEditor()`.
+It does not use Nuxt UI's `<UEditor>` component. `<UEditor>`'s own `onUpdate` handler always
+serializes the whole document to markdown on every keystroke, with no way to debounce it. Under
+fast typing or a held backspace, that serialization queues up and freezes the page. Building the
+editor directly gives full control over when serialization happens.
+
+The toolbar and menu item definitions (fixed toolbar, bubble toolbar, suggestion menu, and the
+drag-handle's block menu) live in `app/utils/postEditorItems.ts`, imported by explicit relative
+path.
+
+### Markdown at the boundary
+
+The document lives as native ProseMirror state while the user types. `PostEditor.vue` never
+calls `editor.getMarkdown()` (a full-document serialize) inside the editor's `onUpdate` handler.
+Instead:
+
+- `onUpdate` only marks the document dirty and (re)starts a 400ms debounce timer.
+- The debounce timer's callback, and the editor's `onBlur` handler, do the real markdown
+  serialization and write it to the component's `v-model`.
+- An external change to the `v-model` (for example, the parent loading a different post) is
+  compared against the last markdown string this component itself emitted. If it matches, the
+  incoming change is the component's own echo, and it is ignored — no re-serialization needed to
+  detect that.
+
+This keeps every keystroke cheap. The only place a full-document serialization ever runs is the
+debounced flush, at most once per 400ms of active typing, plus once on blur.
+
+### Removed features
+
+Mention, Emoji, and Horizontal Rule are not in the editor. They may return later as separate
+features. Text Align was removed too — it was a toolbar button that never worked, because the
+`@tiptap/extension-text-align` package was never installed.
 
 A post's status has no control in the admin UI yet — a known, accepted gap in
 `@plutocms/pluto`'s generic form, not something this layer works around.

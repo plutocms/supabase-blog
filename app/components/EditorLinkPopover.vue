@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Editor } from '@tiptap/vue-3'
+import { useEditorSnapshot } from '../composables/useEditorSnapshot'
 
 const props = defineProps<{
   editor: Editor
@@ -9,14 +10,18 @@ const props = defineProps<{
 const open = ref(false)
 const url = ref('')
 
-const active = computed(() => props.editor.isActive('link'))
-const disabled = computed(() => {
-  if (!props.editor.isEditable) {
-    return true
-  }
-  const { selection } = props.editor.state
-  return selection.empty && !props.editor.isActive('link')
-})
+// `editor.isActive(...)` and `editor.state` must never be read from a
+// computed — see `useEditorSnapshot` for why. This snapshot rebuilds at
+// most once per animation frame instead.
+const snapshot = useEditorSnapshot(
+  () => props.editor,
+  (editor) => ({
+    active: editor.isActive('link'),
+    disabled:
+      !editor.isEditable ||
+      (editor.view.state.selection.empty && !editor.isActive('link')),
+  })
+)
 
 watch(
   () => props.editor,
@@ -40,11 +45,14 @@ watch(
   { immediate: true }
 )
 
-watch(active, (isActive) => {
-  if (isActive && props.autoOpen) {
-    open.value = true
+watch(
+  () => snapshot.value?.active,
+  (isActive) => {
+    if (isActive && props.autoOpen) {
+      open.value = true
+    }
   }
-})
+)
 
 function setLink() {
   if (!url.value) {
@@ -104,8 +112,8 @@ function handleKeyDown(event: KeyboardEvent) {
   <UPopover v-model:open="open" :ui="{ content: 'p-0.5' }">
     <UTooltip text="Link">
       <UButton
-        :active="active"
-        :disabled="disabled"
+        :active="snapshot?.active ?? false"
+        :disabled="snapshot?.disabled ?? true"
         icon="i-lucide-link"
         color="neutral"
         active-color="primary"
@@ -127,7 +135,7 @@ function handleKeyDown(event: KeyboardEvent) {
       >
         <div class="flex items-center mr-0.5">
           <UButton
-            :disabled="!url && !active"
+            :disabled="!url && !snapshot?.active"
             icon="i-lucide-corner-down-left"
             variant="ghost"
             size="sm"
@@ -138,7 +146,7 @@ function handleKeyDown(event: KeyboardEvent) {
           <USeparator orientation="vertical" class="h-6 mx-1" />
 
           <UButton
-            :disabled="!url && !active"
+            :disabled="!url && !snapshot?.active"
             icon="i-lucide-external-link"
             color="neutral"
             variant="ghost"
@@ -148,7 +156,7 @@ function handleKeyDown(event: KeyboardEvent) {
           />
 
           <UButton
-            :disabled="!url && !active"
+            :disabled="!url && !snapshot?.active"
             icon="i-lucide-trash"
             color="neutral"
             variant="ghost"
