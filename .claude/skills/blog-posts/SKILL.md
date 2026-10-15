@@ -20,8 +20,9 @@ columns:
 - `title` — text. Required.
 - `content` — text. The post body, in markdown. It can hold inline images.
 - `status` — text. Either `draft` or `published`. The default is `draft`.
-- `published_at` — timestamptz. Null while the post is a draft. The API sets it when a post
-  becomes published, and clears it back to null when a post goes back to draft.
+- `published_at` — timestamptz. Null until the post is published for the first time. The API
+  sets it on the first publish only. It does not clear it when a post goes back to draft. A
+  post that is unpublished and then published again keeps its original date.
 
 Row Level Security rules use three named capabilities, checked through
 `public.has_capability(cap)` (from `@plutocms/supabase` 0.7.0+):
@@ -90,13 +91,13 @@ HTML for display — see the `prose` skill for its full detail.
 
 `/admin/posts`, `/admin/post/new`, and `/admin/post/edit/:id` no longer run hand-written pages
 and forms. They run `@plutocms/pluto`'s generic content-model admin UI, against one content
-type declared in `shared/content/post.ts`:
+type declared in `shared/utils/content-post.ts`:
 
 - `app/pages/admin/posts.vue` renders `<PlutoContentList type="post" />`.
 - `app/pages/admin/post/new.vue` renders `<PlutoContentForm type="post" />`.
 - `app/pages/admin/post/edit/[id].vue` renders `<PlutoContentForm type="post" :id="..." />`.
 
-`shared/content/post.ts` declares the `title`, `slug`, and `content` fields, the `status`
+`shared/utils/content-post.ts` declares the `title`, `slug`, and `content` fields, the `status`
 workflow (`draft`/`published`, stamping `published_at` the first time a post is published), the
 `created_at`/`updated_at` timestamps, and the three capabilities above. It sets
 `autoRoutes: false` and explicit `basePath`/`newPath`/`editPath` values, so the URLs above never
