@@ -147,8 +147,23 @@ Mention, Emoji, and Horizontal Rule are not in the editor. They may return later
 features. Text Align was removed too — it was a toolbar button that never worked, because the
 `@tiptap/extension-text-align` package was never installed.
 
-A post's status has no control in the admin UI yet — a known, accepted gap in
-`@plutocms/pluto`'s generic form, not something this layer works around.
+### Focus layout and publish controls
+
+The `post` content type sets `form: { layout: 'focus', aside: true, asideCollapsed: true,
+width: 'full' }`. This keeps the editor a clean writing surface:
+
+- The generic form drops its heading and its container padding. `PostEditor.vue` supplies its
+  own padding.
+- The slug field (`region: 'side'`) moves into a right sidebar. The sidebar starts closed. A
+  toolbar button opens it.
+- The form's toolbar shows the post status (Draft or Published), Save draft or Update, Publish,
+  and an overflow menu with Unpublish and Delete. Publish uses the `posts:publish` capability.
+
+`@plutocms/pluto`'s `admin-view-chrome` skill describes the general mechanism. This layer only
+sets the config.
+
+The editor's sticky toolbar uses `z-10`, not `z-50`. The admin navbar uses `z-50`. The editor
+toolbar must stay below page-level chrome.
 
 ## Image upload
 

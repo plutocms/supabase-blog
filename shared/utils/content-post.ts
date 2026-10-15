@@ -46,6 +46,10 @@ export const postType = defineContentType({
     { name: 'content', type: 'richtext', label: 'Content', region: 'main' },
   ],
   slug: { field: 'slug' },
+  // Keep the post editor a clean writing surface. The focus layout drops the
+  // heading and the container padding. The slug sidebar starts closed. The
+  // toolbar button opens it.
+  form: { layout: 'focus', aside: true, asideCollapsed: true, width: 'full' },
   status: {
     column: 'status',
     default: 'draft',
