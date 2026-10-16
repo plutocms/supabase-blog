@@ -5,7 +5,6 @@ import type {
   EditorToolbarItem,
 } from '@nuxt/ui'
 import type { Editor, JSONContent } from '@tiptap/vue-3'
-import theme from '#build/ui/editor'
 import { createHandlers, mapEditorItems } from '@nuxt/ui/utils/editor'
 import { tv } from '@nuxt/ui/utils/tv'
 import Code from '@tiptap/extension-code'
@@ -14,6 +13,7 @@ import Placeholder from '@tiptap/extension-placeholder'
 import { Markdown } from '@tiptap/markdown'
 import StarterKit from '@tiptap/starter-kit'
 import { EditorContent, useEditor } from '@tiptap/vue-3'
+import theme from '#build/ui/editor'
 import {
   bubbleToolbarItems,
   createBlockMenuItemTree,

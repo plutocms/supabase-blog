@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import theme from '#build/ui/editor'
 import { tv } from '@nuxt/ui/utils/tv'
+import theme from '#build/ui/editor'
 import { renderRichtext } from '../utils/richtext'
 
 const props = defineProps<{
