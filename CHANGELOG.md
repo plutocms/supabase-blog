@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/plutocms/supabase-blog/compare/v0.5.2...v0.6.0) (2026-09-14)
+
+
+### Features
+
+* **prose:** add `PlutoProse` for rendering stored richtext ([#29](https://github.com/plutocms/supabase-blog/issues/29)) ([fad9049](https://github.com/plutocms/supabase-blog/commit/fad904930ea5db7f792c0e9b30d8c6463be8d000))
+
 ## [0.5.2](https://github.com/plutocms/supabase-blog/compare/v0.5.1...v0.5.2) (2026-09-14)
 
 
