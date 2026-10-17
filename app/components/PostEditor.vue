@@ -5,7 +5,6 @@ import type {
   EditorToolbarItem,
 } from '@nuxt/ui'
 import type { Editor, JSONContent } from '@tiptap/vue-3'
-import theme from '#build/ui/editor'
 import { createHandlers, mapEditorItems } from '@nuxt/ui/utils/editor'
 import { tv } from '@nuxt/ui/utils/tv'
 import Code from '@tiptap/extension-code'
@@ -14,6 +13,7 @@ import Placeholder from '@tiptap/extension-placeholder'
 import { Markdown } from '@tiptap/markdown'
 import StarterKit from '@tiptap/starter-kit'
 import { EditorContent, useEditor } from '@tiptap/vue-3'
+import theme from '#build/ui/editor'
 import {
   bubbleToolbarItems,
   createBlockMenuItemTree,
@@ -298,7 +298,7 @@ provide('editorHandlers', handlers)
       <EditorToolbar
         :editor="editor"
         :items="fixedToolbarItems"
-        class="border-b border-muted sticky top-0 inset-x-0 px-8 py-2 z-50 bg-default overflow-x-auto"
+        class="border-b border-muted sticky top-0 inset-x-0 px-8 py-2 z-10 bg-default overflow-x-auto"
       >
         <template #link>
           <EditorLinkPopover :editor="editor" auto-open />

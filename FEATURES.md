@@ -10,7 +10,8 @@ policies shared by every project here.
 
 - Blog post admin: create, edit, list, and delete posts with a rich text editor, gated by the
   `posts:read_drafts`, `posts:publish`, and `posts:delete` capabilities. The admin UI runs on
-  `@plutocms/pluto`'s generic content-model UI, against the `post` content type.
+  `@plutocms/pluto`'s generic content-model UI, against the `post` content type. The post
+  editor uses a focus layout with draft/publish controls.
   @.claude/skills/blog-posts/SKILL.md
 - `PlutoProse`: displays a stored richtext value (markdown, HTML, or Tiptap JSON) as sanitized,
   styled HTML on a public page, with no Tiptap editor instance involved.
