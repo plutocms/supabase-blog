@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/plutocms/supabase-blog/compare/v0.6.0...v0.7.0) (2026-10-17)
+
+
+### Features
+
+* **post:** use the focus layout for the post editor ([#31](https://github.com/plutocms/supabase-blog/issues/31)) ([b89e842](https://github.com/plutocms/supabase-blog/commit/b89e84237cea9273411c008fb804d2c9776e2400))
+
 ## [0.6.0](https://github.com/plutocms/supabase-blog/compare/v0.5.2...v0.6.0) (2026-09-14)
 
 
