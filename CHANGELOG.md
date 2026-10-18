@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.1](https://github.com/plutocms/supabase-blog/compare/v0.8.0...v0.8.1) (2026-10-18)
+
+
+### Bug Fixes
+
+* **deps:** use @plutocms/supabase-storage 0.7 and @plutocms/supabase 0.9.1 ([#35](https://github.com/plutocms/supabase-blog/issues/35)) ([52ced90](https://github.com/plutocms/supabase-blog/commit/52ced90b47838fe08df921fb47c38dee0a187b39))
+
 ## [0.8.0](https://github.com/plutocms/supabase-blog/compare/v0.7.0...v0.8.0) (2026-10-17)
 
 
