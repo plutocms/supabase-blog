@@ -19,6 +19,10 @@ import { shallowRef, watch } from 'vue'
  * call `editor.isActive(...)`, `editor.can()...`, or read `editor.state` /
  * `editor.view.state` without becoming a tracked dependency.
  *
+ * The optional `rebuildOn` getter names extra reactive sources. When one of
+ * them changes, the snapshot rebuilds at once. The toolbars use it to follow
+ * a change of their items or of the admin language.
+ *
  * Each call to this composable owns its own `scheduled`/`rafId` state. Do
  * not hoist that state to module scope — multiple toolbars call this
  * composable at once, and a shared guard would make one toolbar's pending
@@ -26,7 +30,8 @@ import { shallowRef, watch } from 'vue'
  */
 export function useEditorSnapshot<T>(
   editor: () => Editor | undefined,
-  build: (editor: Editor) => T
+  build: (editor: Editor) => T,
+  rebuildOn?: () => unknown
 ): Readonly<ShallowRef<T | undefined>> {
   const snapshot = shallowRef<T | undefined>()
 
@@ -77,6 +82,10 @@ export function useEditorSnapshot<T>(
     },
     { immediate: true }
   )
+
+  if (rebuildOn) {
+    watch(rebuildOn, run)
+  }
 
   return snapshot
 }

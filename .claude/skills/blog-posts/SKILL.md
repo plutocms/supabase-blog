@@ -122,8 +122,8 @@ fast typing or a held backspace, that serialization queues up and freezes the pa
 editor directly gives full control over when serialization happens.
 
 The toolbar and menu item definitions (fixed toolbar, bubble toolbar, suggestion menu, and the
-drag-handle's block menu) live in `app/utils/postEditorItems.ts`, imported by explicit relative
-path.
+drag-handle's block menu) live in `app/utils/postEditorItems.ts`. The editor reads them through
+`usePostEditorItems()` (see "Translation" below).
 
 ### Markdown at the boundary
 
@@ -182,6 +182,73 @@ A post body can hold inline images. The path from click to inserted image:
    `useMedia().getMediaUrl(name)`, then calls
    `editor.chain().focus().setImage({ src, alt }).run()` to insert the image into the post
    body.
+
+## Translation
+
+The admin text of this layer uses the i18n system of `@plutocms/pluto` (see the `i18n` skill
+in `pluto`). The shipped languages are `en` and `pt-BR`. The English text is the same, byte for
+byte, as before.
+
+- `i18n/locales/en.json` and `i18n/locales/pt-BR.json` hold all keys. The layer namespace is
+  `supabase-blog`. Shared words use `pluto.common.*` (for example `pluto.common.delete`).
+- The `post` content type keeps its English literals in `shared/utils/content-post.ts`. The keys
+  `content.post.label`, `content.post.labelPlural`, `content.post.fields.<field>.label`, and
+  `content.post.status.<value>` translate it. Core finds them by convention. The type has no field
+  descriptions, placeholders, or select options, so it has no keys for them. Add a key with the
+  same pattern when the type gets one.
+- `app/plugins/pluto-extension.ts` holds keys, not text, for the nav labels, the page titles, and
+  the capability labels. Pluto resolves them with `tx()`.
+- `PlutoRichtextField.vue` builds the editor placeholder from the translated field label:
+  `supabase-blog.editor.fieldPlaceholder` with `{label}` in lowercase. The field label is already
+  translated, because `PlutoContentField` hands the widget a translated copy of the field.
+
+### Editor items
+
+`usePostEditorItems()` (`app/composables/post-editor-items.ts`) returns the fixed toolbar, the
+bubble toolbar, the suggestion menu, and `createBlockMenuItemTree`. The three arrays are
+`computed`, so a language switch updates them. The pure builders are in
+`app/utils/postEditorItems.ts` (`createFixedToolbarItems(t)` and the others). They take a
+translate function.
+
+The old exports `fixedToolbarItems`, `bubbleToolbarItems`, `suggestionItems`, and
+`createBlockMenuItemTree` stay, in English, marked `@deprecated`. Third parties may import them.
+This layer does not read them. A test checks that the translated items in English equal them, so
+the English text cannot drift.
+
+The block menu names the selected node ("Paragraph", "BulletList"). The map `NODE_TYPE_KEYS` gives
+the key for each known node type. The English values keep the old spelling ("BulletList"). An
+unknown node type shows its name through `upperFirst`, in English.
+
+The toolbar items are built outside Vue reactivity (see `useEditorSnapshot`).
+`EditorToolbar.vue` passes a `rebuildOn` getter to `useEditorSnapshot`, so the toolbar rebuilds
+when its `items` prop or the admin language changes.
+
+The Tiptap placeholder is a function. `PostEditor.vue` sends an empty transaction when the language
+changes, so the editor draws the placeholder again at once.
+
+### Server errors
+
+`GET /api/post/get/:id` throws `createPlutoError` with the key `supabase-blog.errors.postNotFound`.
+The `statusMessage` stays `Post not found`. The response carries `data.i18n`. A raw database error
+message stays as the server sends it. This layer has no admin UI that shows these two public
+routes' errors. The public site owns that text.
+
+### Not translated
+
+- The public prose rendering (`PlutoProse`) and the public pages. They belong to the app's site
+  scope (`usePlutoSiteI18n`).
+- Server code and logs.
+
+### Tests
+
+`test/i18n-locale-files.test.ts` checks that every locale has the same keys, placeholders, and
+plural form count as `en`, and no empty value. The top-level namespaces are only `supabase-blog`
+and `content`, and `content` holds only `post`. It checks that the English `content.post.*` text
+equals the literals of the type. It also scans `app/`, `server/`, and `shared/` for literal
+`supabase-blog.*` and `pluto.*` keys. Each key must exist, and each `supabase-blog.*` key of
+`en.json` must be used. Keep a key that the code builds at run time as a full literal.
+`test/post-editor-items.test.ts` checks the English editor items against the deprecated constants.
+`test/fixtures/i18n-stub.ts` builds a translator over the English messages.
 
 ## The `BlogDatabase` shim
 

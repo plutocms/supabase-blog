@@ -153,3 +153,8 @@ needs to ship.
   understands exactly the node and mark types `PostEditor.vue`'s schema can produce. A node
   type it does not recognize renders as just its own children, with no wrapper element — it
   does not throw, and it does not drop the content.
+
+## Translation
+
+`PlutoProse` shows stored content, so it has no UI text of its own to translate. It does not use the
+admin i18n system. The public site language belongs to the app (`usePlutoSiteI18n`).

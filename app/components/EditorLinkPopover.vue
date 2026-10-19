@@ -7,6 +7,8 @@ const props = defineProps<{
   autoOpen?: boolean
 }>()
 
+const { t } = usePlutoI18n()
+
 const open = ref(false)
 const url = ref('')
 
@@ -110,7 +112,7 @@ function handleKeyDown(event: KeyboardEvent) {
 
 <template>
   <UPopover v-model:open="open" :ui="{ content: 'p-0.5' }">
-    <UTooltip text="Link">
+    <UTooltip :text="t('supabase-blog.editor.link')">
       <UButton
         :active="snapshot?.active ?? false"
         :disabled="snapshot?.disabled ?? true"
@@ -126,20 +128,20 @@ function handleKeyDown(event: KeyboardEvent) {
     <template #content>
       <UInput
         v-model="url"
+        :placeholder="t('supabase-blog.editor.linkPopover.placeholder')"
         name="url"
         type="url"
         variant="none"
-        placeholder="Paste a link..."
         autofocus
         @keydown="handleKeyDown"
       >
         <div class="flex items-center mr-0.5">
           <UButton
             :disabled="!url && !snapshot?.active"
+            :title="t('supabase-blog.editor.linkPopover.apply')"
             icon="i-lucide-corner-down-left"
             variant="ghost"
             size="sm"
-            title="Apply link"
             @click="setLink"
           />
 
@@ -147,21 +149,21 @@ function handleKeyDown(event: KeyboardEvent) {
 
           <UButton
             :disabled="!url && !snapshot?.active"
+            :title="t('supabase-blog.editor.linkPopover.open')"
             icon="i-lucide-external-link"
             color="neutral"
             variant="ghost"
             size="sm"
-            title="Open in new window"
             @click="openLink"
           />
 
           <UButton
             :disabled="!url && !snapshot?.active"
+            :title="t('supabase-blog.editor.linkPopover.remove')"
             icon="i-lucide-trash"
             color="neutral"
             variant="ghost"
             size="sm"
-            title="Remove link"
             @click="removeLink"
           />
         </div>

@@ -14,12 +14,6 @@ import { Markdown } from '@tiptap/markdown'
 import StarterKit from '@tiptap/starter-kit'
 import { EditorContent, useEditor } from '@tiptap/vue-3'
 import theme from '#build/ui/editor'
-import {
-  bubbleToolbarItems,
-  createBlockMenuItemTree,
-  fixedToolbarItems,
-  suggestionItems,
-} from '../utils/postEditorItems'
 import EditorLinkPopover from './EditorLinkPopover.vue'
 import EditorToolbar from './EditorToolbar.vue'
 
@@ -28,7 +22,13 @@ const props = defineProps<{
   ui?: Record<string, string>
 }>()
 
-const defaultPlaceholder = 'Write, type \'/\' for commands...'
+const { t, locale } = usePlutoI18n()
+const {
+  bubbleToolbarItems,
+  createBlockMenuItemTree,
+  fixedToolbarItems,
+  suggestionItems,
+} = usePostEditorItems()
 
 const value = defineModel<string>({ default: '' })
 
@@ -59,11 +59,11 @@ function imageToolbarItems(editor: Editor): EditorToolbarItem[][] {
         icon: 'i-lucide-download',
         to: node?.attrs?.src,
         download: true,
-        tooltip: { text: 'Download' },
+        tooltip: { text: t('supabase-blog.editor.download') },
       },
       {
         icon: 'i-lucide-refresh-cw',
-        tooltip: { text: 'Replace' },
+        tooltip: { text: t('supabase-blog.editor.replace') },
         onClick: () => {
           const { state } = editor
           const { selection } = state
@@ -86,7 +86,7 @@ function imageToolbarItems(editor: Editor): EditorToolbarItem[][] {
     [
       {
         icon: 'i-lucide-trash',
-        tooltip: { text: 'Delete' },
+        tooltip: { text: t('pluto.common.delete') },
         onClick: () => {
           const { state } = editor
           const { selection } = state
@@ -157,7 +157,10 @@ const extensions = [
   Code.extend({ excludes: 'code' }),
   Image,
   Placeholder.configure({
-    placeholder: props.placeholder ?? defaultPlaceholder,
+    // A function, so the text follows the admin language. It runs each time
+    // the editor draws the placeholder.
+    placeholder: () =>
+      props.placeholder ?? t('supabase-blog.editor.placeholder'),
     showOnlyWhenEditable: false,
     showOnlyCurrent: true,
   }),
@@ -285,6 +288,14 @@ watch(value, (incoming) => {
   })
   if (pos <= editor.value.state.doc.content.size) {
     editor.value.commands.setTextSelection(pos)
+  }
+})
+
+// The placeholder is drawn from editor state. An empty transaction makes the
+// editor draw it again, so a language switch updates it at once.
+watch(locale, () => {
+  if (editor.value && !editor.value.isDestroyed) {
+    editor.value.view.dispatch(editor.value.state.tr)
   }
 })
 
