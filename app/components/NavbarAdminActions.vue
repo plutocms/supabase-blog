@@ -2,6 +2,7 @@
 import type { NavbarAdminActionButtonProps } from '#layers/utils/shared/types/navbar'
 
 const route = useRoute()
+const { t } = usePlutoI18n()
 
 // `can()` only hides these actions from a user who cannot use them. It is
 // a UI convenience, not a security boundary. The real enforcement is the
@@ -11,14 +12,14 @@ const { can } = usePlutoPermissions()
 
 const items = computed<NavbarAdminActionButtonProps[]>(() => [
   {
-    label: 'Create post',
+    label: t('supabase-blog.navbar.createPost'),
     icon: 'lucide:file-plus-2',
     to: '/admin/post/new',
     show: !route.path.startsWith('/admin/post/new') && can('posts:publish'),
   },
 
   {
-    label: 'Edit post',
+    label: t('supabase-blog.navbar.editPost'),
     icon: 'lucide:file-pen-line',
     to: `/admin/post/edit/${
       ('id' in route.params && route.params.id) ||

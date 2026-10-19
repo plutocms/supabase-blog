@@ -14,6 +14,8 @@ const emit = defineEmits<{
   'update:modelValue': [value: string]
 }>()
 
+const { t } = usePlutoI18n()
+
 const value = computed(() => (props.modelValue as string | undefined) ?? '')
 </script>
 
@@ -24,7 +26,7 @@ const value = computed(() => (props.modelValue as string | undefined) ?? '')
     <div :class="disabled ? 'pointer-events-none opacity-60' : undefined">
       <PostEditor
         :model-value="value"
-        :placeholder="`Write ${field.label.toLowerCase()}...`"
+        :placeholder="t('supabase-blog.editor.fieldPlaceholder', { label: field.label.toLowerCase() })"
         @update:model-value="emit('update:modelValue', $event)"
       />
     </div>

@@ -285,7 +285,14 @@ function buildGroups(editor: Editor): ResolvedItem[][] {
   )
 }
 
-const snapshot = useEditorSnapshot(() => props.editor, buildGroups)
+const { locale } = usePlutoI18n()
+
+// Rebuild when the items or the admin language change. A function `items`
+// prop keeps its identity, so the language is a source on its own.
+const snapshot = useEditorSnapshot(() => props.editor, buildGroups, () => [
+  props.items,
+  locale.value,
+])
 </script>
 
 <template>
