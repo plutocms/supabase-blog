@@ -111,7 +111,8 @@ editor, see "The rich text editor" and "Image upload" below) keeps its plain `v-
 but the generic form does not call it directly: `app/components/PlutoRichtextField.vue` adapts
 that `v-model` to the `field`/`modelValue`/`disabled`/`update:modelValue` contract every
 content-model field widget shares, and is registered for the `richtext` field type in
-`app/plugins/pluto-extension.ts`.
+`app/plugins/pluto-extension.ts`, with `defineAsyncComponent`. The Tiptap and ProseMirror code then
+stays out of the entry chunk, and core shows a field skeleton while the editor chunk loads.
 
 ## The rich text editor
 

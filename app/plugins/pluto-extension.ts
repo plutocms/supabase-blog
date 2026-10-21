@@ -1,5 +1,12 @@
+import { defineAsyncComponent } from 'vue'
 import NavbarAdminActions from '../components/NavbarAdminActions.vue'
-import PlutoRichtextField from '../components/PlutoRichtextField.vue'
+
+// The editor widget loads on demand. Tiptap and ProseMirror stay out of the
+// entry chunk. Core shows a skeleton while the chunk loads. The navbar action
+// stays eager, because it is in the bar.
+const PlutoRichtextField = defineAsyncComponent(
+  () => import('../components/PlutoRichtextField.vue')
+)
 
 export default defineNuxtPlugin(() => {
   definePlutoExtension({
