@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.2](https://github.com/plutocms/supabase-blog/compare/v0.10.1...v0.10.2) (2026-10-21)
+
+
+### Performance Improvements
+
+* **post:** load the rich text editor on demand ([#48](https://github.com/plutocms/supabase-blog/issues/48)) ([3f7d6b3](https://github.com/plutocms/supabase-blog/commit/3f7d6b30d62df11c8102560a46c914a2dff293cb))
+
 ## [0.10.1](https://github.com/plutocms/supabase-blog/compare/v0.10.0...v0.10.1) (2026-10-20)
 
 
