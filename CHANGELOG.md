@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.3](https://github.com/plutocms/supabase-blog/compare/v0.10.2...v0.10.3) (2026-10-22)
+
+
+### Bug Fixes
+
+* **db:** grant Data API access to the posts table explicitly ([#50](https://github.com/plutocms/supabase-blog/issues/50)) ([b7c3973](https://github.com/plutocms/supabase-blog/commit/b7c3973aa8a389f50e9a30724be25e89dd4efd9a))
+
 ## [0.10.2](https://github.com/plutocms/supabase-blog/compare/v0.10.1...v0.10.2) (2026-10-21)
 
 
