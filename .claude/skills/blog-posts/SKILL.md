@@ -263,3 +263,7 @@ regenerated the snapshot from it.
 Delete the `posts` block from `BlogDatabase` once the generated `Database` snapshot declares
 the `posts` table on its own. At that point `BlogDatabase` can become a plain alias for
 `Database`, or every reference to `BlogDatabase` can move back to `Database`.
+
+## Data API grants
+
+`db/migrations/004_data_api_grants.sql` grants `public.posts` for the Data API (anon `select` only, authenticated and service_role `select, insert, update, delete`). The anon policy still shows published posts only. A new table in this layer needs a grant in the same migration file. See the `layer-migrations` skill in `@plutocms/supabase`.
