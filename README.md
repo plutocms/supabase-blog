@@ -1,6 +1,6 @@
-# Blog layer for Pluto CMS with Supabase
+# Blog layer for Pluto with Supabase
 
-This layer adds a blog to Pluto CMS. It stores posts in Supabase. Editors write them in the Pluto admin with a rich text editor. The layer builds on [`@plutocms/supabase`](https://github.com/plutocms/supabase), `@plutocms/supabase-storage` and `@plutocms/ui`.
+This layer adds a blog to Pluto. It stores posts in Supabase. Editors write them in the Pluto admin with a rich text editor. The layer builds on [`@plutocms/supabase`](https://github.com/plutocms/supabase), `@plutocms/supabase-storage` and `@plutocms/ui`.
 
 ## What the layer gives
 
