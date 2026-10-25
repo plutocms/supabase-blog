@@ -1,75 +1,50 @@
-# Nuxt Minimal Starter
+# Blog layer for Pluto CMS with Supabase
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This layer adds a blog to Pluto CMS. It stores posts in Supabase. Editors write them in the Pluto admin with a rich text editor. The layer builds on [`@plutocms/supabase`](https://github.com/plutocms/supabase), `@plutocms/supabase-storage` and `@plutocms/ui`.
 
-## Setup
+## What the layer gives
 
-Make sure to install dependencies:
+- **Post admin:** list, create, edit and delete posts at `/admin/posts`, `/admin/post/new` and `/admin/post/edit/:id`. The pages run on the generic content UI of `@plutocms/pluto`, against the `post` content type.
+- **Rich text editor:** a Tiptap editor that stores Markdown. It has a focus layout and draft/publish controls.
+- **Inline images:** an editor can pick an existing file or upload a new one. The upload uses the media library of `@plutocms/supabase-storage`.
+- **Capabilities:** `posts:read_drafts`, `posts:publish` and `posts:delete` gate the actions. An admin holds all three.
+- **Public data:** `GET /api/post/list` and `GET /api/post/get/:id` (a numeric id or a slug) for your public pages. Row Level Security hides drafts from anonymous visitors.
+- **`usePost`:** a composable that reads the post list or one post.
+- **`PlutoProse`:** a component that shows a stored richtext value (Markdown, HTML or Tiptap JSON) as sanitized, styled HTML. Use it on a public post page.
+- **Migrations:** the `posts` table and its policies ship as layer migrations. An admin applies them from `/admin/migrations`.
 
-```bash
-# npm
-npm install
+For the full detail, see [FEATURES.md](./FEATURES.md).
 
-# pnpm
-pnpm install
+## Requirements
 
-# yarn
-yarn install
+- A Supabase project, with `SUPABASE_URL` and `SUPABASE_KEY` in your `.env`. See the [`@plutocms/supabase` README](https://github.com/plutocms/supabase).
+- Nuxt 4 and a Tailwind entry file that your app owns. See the single Tailwind build section in the [`@plutocms/pluto` README](https://github.com/plutocms/pluto).
 
-# bun
-bun install
-```
+## Installation
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
+Install the layer. It brings `@plutocms/supabase` (and with it `@plutocms/pluto`), `@plutocms/supabase-storage` and `@plutocms/ui`. Your app extends only this layer.
 
 ```bash
 # npm
-npm run build
+npm i @plutocms/supabase-blog
 
 # pnpm
-pnpm build
-
-# yarn
-yarn build
+pnpm add @plutocms/supabase-blog
 
 # bun
-bun run build
+bun add @plutocms/supabase-blog
 ```
 
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  extends: [['@plutocms/supabase-blog', { install: true }]],
+})
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+The `package.json` of the app lists only `@plutocms/supabase-blog`, besides `nuxt`, `vue` and `vue-router`.
+
+## Links
+
+- Starter: [`pluto-supabase-blog-template`](https://github.com/plutocms/pluto-supabase-blog-template), with public `blog` and `post/[slug]` pages.
+- Skills: `.claude/skills/blog-posts/SKILL.md` and `.claude/skills/prose/SKILL.md`.
