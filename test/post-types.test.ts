@@ -2,8 +2,8 @@ import type { BlogDatabase, FormPost, PostInsert } from '../shared/types/post'
 import { describe, expectTypeOf, it } from 'vitest'
 
 // Guards the schema/type-generation gap this layer starts with:
-// server/api/post/list.get.ts, server/api/post/get/[id].get.ts, and
-// app/composables/post.ts query a `posts` table that the generated Database
+// the content adapter of @plutocms/supabase and server/utils/post-public.ts
+// read a `posts` table that the generated Database
 // snapshot (shared/types/supabase.ts, gitignored, regenerated per environment)
 // does not declare until the layer migration runs and the Supabase CLI
 // regenerates it. shared/types/post.ts adds a `BlogDatabase` shim so the layer

@@ -8,8 +8,7 @@ This layer adds a blog to Pluto. It stores posts in Supabase. Editors write them
 - **Rich text editor:** a Tiptap editor that stores Markdown. It has a focus layout and draft/publish controls.
 - **Inline images:** an editor can pick an existing file or upload a new one. The upload uses the media library of `@plutocms/supabase-storage`.
 - **Capabilities:** `posts:read_drafts`, `posts:publish` and `posts:delete` gate the actions. An admin holds all three.
-- **Public data:** `GET /api/post/list` and `GET /api/post/get/:id` (a numeric id or a slug) for your public pages. Row Level Security hides drafts from anonymous visitors.
-- **`usePost`:** a composable that reads the post list or one post.
+- **Public data:** the published posts on the public API of Pluto, for a site in any stack: `GET /api/pluto/v1/content/post` and `GET /api/pluto/v1/content/post/<id or slug>`. A list item has an `excerpt`, and one post has its body as sanitized `html`. In Nuxt, use `usePlutoPublicList` and `usePlutoPublicItem`. See https://pluto.vulmix.dev/core/public-api.
 - **`PlutoProse`:** a component that shows a stored richtext value (Markdown, HTML or Tiptap JSON) as sanitized, styled HTML. Use it on a public post page.
 - **Migrations:** the `posts` table and its policies ship as layer migrations. An admin applies them from `/admin/migrations`.
 

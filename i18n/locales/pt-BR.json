@@ -67,9 +67,6 @@
         "open": "Abrir em uma nova janela",
         "remove": "Remover link"
       }
-    },
-    "errors": {
-      "postNotFound": "Post não encontrado"
     }
   },
   "content": {
