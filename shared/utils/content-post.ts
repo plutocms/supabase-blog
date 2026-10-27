@@ -63,6 +63,9 @@ export const postType = defineContentType({
   timestamps: { created: 'created_at', updated: 'updated_at' },
   capabilities: { read: 'posts:read_drafts', write: 'posts:publish', delete: 'posts:delete' },
   autoRoutes: false,
+  // The public API (`/api/pluto/v1/content/post`): published posts only. The server hook
+  // `toPublic` (server/utils/post-public.ts) adds `excerpt` to a list item and `html` to one item.
+  api: { public: true },
   basePath: '/admin/posts',
   newPath: '/admin/post/new',
   editPath: (id) => `/admin/post/edit/${id}`,

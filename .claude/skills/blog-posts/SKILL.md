@@ -54,38 +54,28 @@ site still running `@plutocms/supabase` older than 0.4.0 gets a clear upgrade er
 silently missing this layer's migrations. Remove it one release after 0.4.0 is the floor
 everywhere.
 
-## Server API routes
+## The public API
 
-The public site reads posts through two hand-written routes under `server/api/post/`,
-unchanged. Each loads a Supabase client typed with `BlogDatabase` (see the shim below), from
-`#supabase/server`.
+The layer has no route of its own. The public site, in Nuxt or in any other stack, reads posts
+through core's public API (see "The public API" in the content-model skill of `@plutocms/pluto`):
 
-- `GET /api/post/list` — no body. Returns `{ data }`, every post ordered by `created_at`
-  descending (the row-level security rule still hides drafts from an anonymous caller).
-- `GET /api/post/get/:id` — `:id` can be a numeric id or a slug. Returns `{ data }`. Returns a
-  404 with the message `Post not found` when no row matches.
+- `GET /api/pluto/v1/content/post` — the published posts, `{ data, meta: { total, limit, offset } }`.
+  Query: `limit`, `offset`, `search`, `sort` (`-publishedAt`, `title`, …), `filter[slug]`.
+- `GET /api/pluto/v1/content/post/<id or slug>` — one published post, `{ data }`. A draft or a
+  missing post answers 404.
+- The post type sets `api: { public: true }`. An item has `id`, `title`, `slug`, and `createdAt`,
+  `updatedAt`, `publishedAt` (the Supabase adapter's `timestampKeys`).
+- `server/utils/post-public.ts` (`postToPublic`, the `hooks.toPublic` that `server/plugins/content.ts`
+  attaches): a list item has no `content` and has `excerpt` (`richtextToPlainText`, cut at a word
+  to 200 characters, `cutText`). One item keeps the stored `content` and adds `html`: the body
+  rendered and sanitized by `renderRichtext`, the same code as `PlutoProse`. Tests:
+  `test/post-public.test.ts`.
+- In Nuxt, use core's `usePlutoPublicList('post', { … })` and `usePlutoPublicItem('post', slug)`.
+  Show `html` with `PlutoProse` (pass `format: 'html'`) or set it as `innerHTML`.
 
-The old hand-written write routes — `POST /api/post/create`, `POST /api/post/edit/:id`,
-`DELETE /api/post/delete/:id` — are gone. The admin UI writes through the generic
-`/api/_pluto/content/post/*` routes instead (see "The admin UI: the `post` content type"
-below). `server/utils/validate-post.ts` (`assertValidPostPayload`), which only those three
-routes called, is gone too.
-
-## The `usePost` composable
-
-`app/composables/post.ts` exports `usePost(postSlugOrId?)`. The admin UI does not use it
-anymore (see below) — it stays because `pluto-supabase-blog-template`'s public pages
-(`blog.vue`, `post/[slug].vue`) still call it.
-
-- Call it with no argument to fetch the post list (`GET /api/post/list`).
-- Call it with a slug or id to fetch one post (`GET /api/post/get/:id`).
-
-It returns `{ posts, post, refresh, pending, error }`, and the result is also awaitable (it has
-a `then` method), so `const { post } = await usePost(id)` works.
-
-A post's `content` field, as `usePost` returns it, is the raw stored value this editor writes
-(markdown today). `PlutoProse` is the component that turns that value into sanitized, styled
-HTML for display — see the `prose` skill for its full detail.
+The old routes `GET /api/post/list` and `GET /api/post/get/:id` and the `usePost` composable are
+gone. The admin UI writes through the generic `/api/_pluto/content/post/*` routes (see "The admin
+UI: the `post` content type" below).
 
 ## The admin UI: the `post` content type
 
@@ -229,10 +219,8 @@ changes, so the editor draws the placeholder again at once.
 
 ### Server errors
 
-`GET /api/post/get/:id` throws `createPlutoError` with the key `supabase-blog.errors.postNotFound`.
-The `statusMessage` stays `Post not found`. The response carries `data.i18n`. A raw database error
-message stays as the server sends it. This layer has no admin UI that shows these two public
-routes' errors. The public site owns that text.
+The public API of core answers its own errors (`pluto.errors.notFound` for a missing or draft
+post). This layer has no route of its own, so it throws no server error of its own.
 
 ### Not translated
 
