@@ -27,8 +27,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@plutocms/supabase": "^0.14.0",
-    "@plutocms/supabase-storage": "^0.12.0",
+    "@plutocms/supabase": "^0.14.1",
+    "@plutocms/supabase-storage": "^0.12.1",
     "@plutocms/ui": "^0.3.0",
     "@tiptap/core": "^3.32.0",
     "@tiptap/extension-code": "^3.32.0",
