@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.13.0](https://github.com/plutocms/supabase-blog/compare/v0.12.0...v0.13.0) (2026-10-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* `/api/post/list`, `/api/post/get/:id` and `usePost` are gone.
+
+### Features
+
+* posts on the public API of Pluto, with an excerpt and sanitized html ([#58](https://github.com/plutocms/supabase-blog/issues/58)) ([4625a57](https://github.com/plutocms/supabase-blog/commit/4625a570bb0f90db67b084e5946b99867ef3b75e))
+
 ## [0.12.0](https://github.com/plutocms/supabase-blog/compare/v0.11.0...v0.12.0) (2026-10-25)
 
 
