@@ -6,7 +6,8 @@
 // — this wrapper is the adapter, so PostEditor.vue itself stays untouched.
 //
 // With `canvas`, the core post editor (`post-canvas`) shows this widget as its
-// Visual mode: no label, and a centered writing column that fills the canvas.
+// Visual mode: no label, and a full-height box that scrolls its own text, like
+// the Markdown mode of the post editor.
 const props = defineProps<{
   field: PlutoTextField
   modelValue: unknown
@@ -25,7 +26,7 @@ const value = computed(() => (props.modelValue as string | undefined) ?? '')
 const UFormField = resolveComponent('UFormField')
 const frame = computed(() =>
   props.canvas
-    ? { is: 'div', attrs: {} }
+    ? { is: 'div', attrs: { class: 'flex h-full min-h-0 flex-col p-4' } }
     : {
         is: UFormField,
         attrs: {
@@ -41,7 +42,12 @@ const frame = computed(() =>
   <component :is="frame.is" v-bind="frame.attrs">
     <!-- PostEditor.vue has no disabled state of its own. Dim and block
          input instead of forwarding an unsupported prop. -->
-    <div :class="disabled ? 'pointer-events-none opacity-60' : undefined">
+    <div
+      :class="[
+        canvas && 'flex min-h-0 flex-1 flex-col',
+        disabled && 'pointer-events-none opacity-60',
+      ]"
+    >
       <PostEditor
         :model-value="value"
         :placeholder="
@@ -51,7 +57,11 @@ const frame = computed(() =>
         "
         :ui="
           canvas
-            ? { base: 'mx-auto w-full max-w-3xl px-8 py-6 lg:px-12 lg:py-10' }
+            ? {
+                root: 'border-default bg-default flex min-h-0 flex-1 flex-col overflow-hidden rounded-md border',
+                content: 'min-h-0 flex-1 overflow-y-auto',
+                base: 'min-h-full px-8 py-6',
+              }
             : undefined
         "
         @update:model-value="emit('update:modelValue', $event)"
