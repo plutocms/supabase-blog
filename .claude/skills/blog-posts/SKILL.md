@@ -134,20 +134,26 @@ Mention, Emoji, and Horizontal Rule are not in the editor. They may return later
 features. Text Align was removed too — it was a toolbar button that never worked, because the
 `@tiptap/extension-text-align` package was never installed.
 
-### Focus layout and publish controls
+### Canvas layout and publish controls
 
-The `post` content type sets `form: { layout: 'focus', aside: true, asideCollapsed: true,
-width: 'full' }`. This keeps the editor a clean writing surface:
+The `post` content type sets `form: { layout: 'canvas', canvasField: 'content', leftPanel: {
+label: 'pluto.post.outline', … } }`, and the `content` field sets `widget: 'post-canvas'`. The
+`post-canvas` widget is the core post editor of `@plutocms/pluto`:
 
-- The generic form drops its heading and its container padding. `PostEditor.vue` supplies its
-  own padding.
-- The slug field (`region: 'side'`) moves into a right sidebar. The sidebar starts closed. A
-  toolbar button opens it.
+- **Visual** mode shows the `richtext` widget of this layer (`PlutoRichtextField.vue`, which
+  wraps `PostEditor.vue`) with the `canvas` prop. In canvas, the wrapper has no label, and the
+  editor is a centered writing column. The image upload stays.
+- **Markdown** mode shows the Markdown source next to a preview of the site. The preview is an
+  iframe of `/_pluto/post-preview`. An app can replace the default preview with its own
+  `components/PlutoPostPreview.vue`.
+- The left panel shows the outline (the headings of the post) and the mode switch. Markdown that
+  the visual editor cannot keep turns Visual off.
+- The other fields (the title and the slug) are in the panel on the right.
 - The form's toolbar shows the post status (Draft or Published), Save draft or Update, Publish,
   and an overflow menu with Unpublish and Delete. Publish uses the `posts:publish` capability.
 
-`@plutocms/pluto`'s `admin-view-chrome` skill describes the general mechanism. This layer only
-sets the config.
+`@plutocms/pluto`'s `admin-view-chrome` and `github-cms` skills describe the canvas layout and
+the post editor. This layer only sets the config and gives the `canvas` prop to its widget.
 
 The editor's sticky toolbar uses `z-10`, not `z-50`. The admin navbar uses `z-50`. The editor
 toolbar must stay below page-level chrome.
