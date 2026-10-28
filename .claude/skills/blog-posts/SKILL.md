@@ -49,11 +49,6 @@ engine discovers, applies, and records migrations. This layer's migration files,
 - `db/migrations/003_capability_policies.sql` — rewrites the same four `posts` RLS policies to
   the three named capabilities above, instead of `public.is_admin()`.
 
-`public/schema.supabase-blog.sql` is now a compatibility stub. It stays in place only so a
-site still running `@plutocms/supabase` older than 0.4.0 gets a clear upgrade error instead of
-silently missing this layer's migrations. Remove it one release after 0.4.0 is the floor
-everywhere.
-
 ## The public API
 
 The layer has no route of its own. The public site, in Nuxt or in any other stack, reads posts
@@ -198,13 +193,10 @@ byte, as before.
 `usePostEditorItems()` (`app/composables/post-editor-items.ts`) returns the fixed toolbar, the
 bubble toolbar, the suggestion menu, and `createBlockMenuItemTree`. The three arrays are
 `computed`, so a language switch updates them. The pure builders are in
-`app/utils/postEditorItems.ts` (`createFixedToolbarItems(t)` and the others). They take a
-translate function.
-
-The old exports `fixedToolbarItems`, `bubbleToolbarItems`, `suggestionItems`, and
-`createBlockMenuItemTree` stay, in English, marked `@deprecated`. Third parties may import them.
-This layer does not read them. A test checks that the translated items in English equal them, so
-the English text cannot drift.
+`app/utils/postEditorItems.ts`. They take a translate function: `createFixedToolbarItems(t)`,
+`createBubbleToolbarItems(t)`, `createSuggestionItems(t)` and
+`createBlockMenuItemTree(t, editor, selectedNode)`. Snapshot tests hold the English items, so the
+English text cannot drift.
 
 The block menu names the selected node ("Paragraph", "BulletList"). The map `NODE_TYPE_KEYS` gives
 the key for each known node type. The English values keep the old spelling ("BulletList"). An
@@ -236,7 +228,7 @@ and `content`, and `content` holds only `post`. It checks that the English `cont
 equals the literals of the type. It also scans `app/`, `server/`, and `shared/` for literal
 `supabase-blog.*` and `pluto.*` keys. Each key must exist, and each `supabase-blog.*` key of
 `en.json` must be used. Keep a key that the code builds at run time as a full literal.
-`test/post-editor-items.test.ts` checks the English editor items against the deprecated constants.
+`test/post-editor-items.test.ts` checks the English editor items against snapshots.
 `test/fixtures/i18n-stub.ts` builds a translator over the English messages.
 
 ## The `BlogDatabase` shim
