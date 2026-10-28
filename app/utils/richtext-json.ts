@@ -14,7 +14,7 @@ interface JsonNode {
   attrs?: Record<string, unknown>
   content?: JsonNode[]
   text?: string
-  marks?: Array<{ type?: string, attrs?: Record<string, unknown> }>
+  marks?: Array<{ type?: string; attrs?: Record<string, unknown> }>
 }
 
 function escapeText(value: string): string {
@@ -40,7 +40,14 @@ function renderChildren(nodes: JsonNode[] | undefined): string {
 // can list marks in any order, so nesting always follows this table
 // rather than the array's own order. Any mark type not in this list (an
 // unknown mark) is ignored.
-const MARK_ORDER = ['code', 'bold', 'italic', 'strike', 'underline', 'link'] as const
+const MARK_ORDER = [
+  'code',
+  'bold',
+  'italic',
+  'strike',
+  'underline',
+  'link',
+] as const
 
 const MARK_TAGS: Record<string, string> = {
   code: 'code',
@@ -62,7 +69,8 @@ function renderText(node: JsonNode): string {
 
     if (type === 'link') {
       const href = typeof mark.attrs?.href === 'string' ? mark.attrs.href : ''
-      const title = typeof mark.attrs?.title === 'string' ? mark.attrs.title : undefined
+      const title =
+        typeof mark.attrs?.title === 'string' ? mark.attrs.title : undefined
       const titleAttr = title ? ` title="${escapeAttribute(title)}"` : ''
       html = `<a href="${escapeAttribute(href)}"${titleAttr}>${html}</a>`
       continue
@@ -101,16 +109,21 @@ function renderNode(node: JsonNode): string {
     case 'blockquote':
       return `<blockquote>${renderChildren(node.content)}</blockquote>`
     case 'codeBlock': {
-      const language = typeof node.attrs?.language === 'string' ? node.attrs.language : ''
-      const classAttr = language ? ` class="language-${escapeAttribute(language)}"` : ''
+      const language =
+        typeof node.attrs?.language === 'string' ? node.attrs.language : ''
+      const classAttr = language
+        ? ` class="language-${escapeAttribute(language)}"`
+        : ''
       return `<pre><code${classAttr}>${renderChildren(node.content)}</code></pre>`
     }
     case 'horizontalRule':
       return '<hr>'
     case 'image': {
       const src = typeof node.attrs?.src === 'string' ? node.attrs.src : ''
-      const alt = typeof node.attrs?.alt === 'string' ? node.attrs.alt : undefined
-      const title = typeof node.attrs?.title === 'string' ? node.attrs.title : undefined
+      const alt =
+        typeof node.attrs?.alt === 'string' ? node.attrs.alt : undefined
+      const title =
+        typeof node.attrs?.title === 'string' ? node.attrs.title : undefined
       const altAttr = alt ? ` alt="${escapeAttribute(alt)}"` : ''
       const titleAttr = title ? ` title="${escapeAttribute(title)}"` : ''
       return `<img src="${escapeAttribute(src)}"${altAttr}${titleAttr}>`

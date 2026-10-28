@@ -16,7 +16,9 @@ const ui = computed(() => tv({ extend: theme })())
 // `app/utils/richtext-sanitize.ts`), which strips the value down to a
 // strict element and attribute allowlist. The string below is safe to
 // set as `innerHTML`.
-const html = computed(() => renderRichtext(props.content, props.format ?? 'auto'))
+const html = computed(() =>
+  renderRichtext(props.content, props.format ?? 'auto')
+)
 </script>
 
 <template>
@@ -38,6 +40,11 @@ const html = computed(() => renderRichtext(props.content, props.format ?? 'auto'
        against `@vue/compiler-sfc`'s own SSR codegen output for all three
        forms — do not "fix" this back to either one. -->
   <!-- eslint-disable-next-line vue/attribute-hyphenation -- must stay camelCase, see comment above -->
-  <component :is="tag ?? 'div'" v-if="html" :class="ui.base({ class: props.class })" :innerHTML="html" />
+  <component
+    :is="tag ?? 'div'"
+    v-if="html"
+    :class="ui.base({ class: props.class })"
+    :inner-h-t-m-l="html"
+  />
   <slot v-else name="empty" />
 </template>

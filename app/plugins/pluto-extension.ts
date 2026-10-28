@@ -27,15 +27,39 @@ export default defineNuxtPlugin(() => {
       },
     ],
     pages: [
-      { id: 'posts', path: '/admin/posts', title: 'supabase-blog.nav.posts', icon: 'lucide:file-text' },
-      { id: 'post-new', path: '/admin/post/new', title: 'supabase-blog.pages.newPost', parent: 'supabase-blog:posts' },
+      {
+        id: 'posts',
+        path: '/admin/posts',
+        title: 'supabase-blog.nav.posts',
+        icon: 'lucide:file-text',
+      },
+      {
+        id: 'post-new',
+        path: '/admin/post/new',
+        title: 'supabase-blog.pages.newPost',
+        parent: 'supabase-blog:posts',
+      },
     ],
     capabilities: [
-      { id: 'posts-read-drafts', key: 'posts:read_drafts', label: 'supabase-blog.capabilities.readDrafts' },
-      { id: 'posts-publish', key: 'posts:publish', label: 'supabase-blog.capabilities.publish' },
-      { id: 'posts-delete', key: 'posts:delete', label: 'supabase-blog.capabilities.delete' },
+      {
+        id: 'posts-read-drafts',
+        key: 'posts:read_drafts',
+        label: 'supabase-blog.capabilities.readDrafts',
+      },
+      {
+        id: 'posts-publish',
+        key: 'posts:publish',
+        label: 'supabase-blog.capabilities.publish',
+      },
+      {
+        id: 'posts-delete',
+        key: 'posts:delete',
+        label: 'supabase-blog.capabilities.delete',
+      },
     ],
     contentTypes: [{ id: 'post', type: postType }],
-    contentFieldWidgets: [{ id: 'richtext', fieldType: 'richtext', component: PlutoRichtextField }],
+    contentFieldWidgets: [
+      { id: 'richtext', fieldType: 'richtext', component: PlutoRichtextField },
+    ],
   })
 })

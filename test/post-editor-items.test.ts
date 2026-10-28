@@ -21,11 +21,15 @@ describe('usePostEditorItems in English', () => {
   })
 
   it('gives the fixed toolbar', () => {
-    expect(plain(usePostEditorItems().fixedToolbarItems.value)).toMatchSnapshot()
+    expect(
+      plain(usePostEditorItems().fixedToolbarItems.value)
+    ).toMatchSnapshot()
   })
 
   it('gives the bubble toolbar', () => {
-    expect(plain(usePostEditorItems().bubbleToolbarItems.value)).toMatchSnapshot()
+    expect(
+      plain(usePostEditorItems().bubbleToolbarItems.value)
+    ).toMatchSnapshot()
   })
 
   it('gives the suggestion menu', () => {

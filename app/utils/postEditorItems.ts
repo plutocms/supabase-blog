@@ -247,7 +247,7 @@ export function createSuggestionItems(t: EditorItemsTranslate) {
 export function createBlockMenuItemTree(
   t: EditorItemsTranslate,
   editor: Editor,
-  selectedNode: { node: JSONContent, pos: number }
+  selectedNode: { node: JSONContent; pos: number }
 ) {
   const nodeType = selectedNode.node.type ?? ''
   const nodeKey = NODE_TYPE_KEYS[nodeType]
