@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.14.0](https://github.com/plutocms/supabase-blog/compare/v0.13.1...v0.14.0) (2026-10-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* stop extending @plutocms/ui ([#63](https://github.com/plutocms/supabase-blog/issues/63))
+* remove the deprecated editor items and the schema stub ([#62](https://github.com/plutocms/supabase-blog/issues/62))
+
+### Features
+
+* remove the deprecated editor items and the schema stub ([#62](https://github.com/plutocms/supabase-blog/issues/62)) ([1d5758e](https://github.com/plutocms/supabase-blog/commit/1d5758ec99c0391beb3276f9172e3dd079fd8dc7))
+* stop extending @plutocms/ui ([#63](https://github.com/plutocms/supabase-blog/issues/63)) ([3d36980](https://github.com/plutocms/supabase-blog/commit/3d36980fd6a62d92e11c6ce5460674ec66a341ce))
+
+
+### Bug Fixes
+
+* **deps:** use @plutocms/supabase 0.15 and @plutocms/supabase-storage 0.13 ([#65](https://github.com/plutocms/supabase-blog/issues/65)) ([cfe5bc3](https://github.com/plutocms/supabase-blog/commit/cfe5bc37d95d40e8655771dee5910112a4bef58d))
+
 ## [0.13.1](https://github.com/plutocms/supabase-blog/compare/v0.13.0...v0.13.1) (2026-10-27)
 
 
