@@ -5,7 +5,9 @@ describe('richtextJsonToHtml', () => {
   it('renders a paragraph', () => {
     const html = richtextJsonToHtml({
       type: 'doc',
-      content: [{ type: 'paragraph', content: [{ type: 'text', text: 'hello' }] }],
+      content: [
+        { type: 'paragraph', content: [{ type: 'text', text: 'hello' }] },
+      ],
     })
 
     expect(html).toBe('<p>hello</p>')
@@ -14,7 +16,13 @@ describe('richtextJsonToHtml', () => {
   it('renders a heading at its level', () => {
     const html = richtextJsonToHtml({
       type: 'doc',
-      content: [{ type: 'heading', attrs: { level: 2 }, content: [{ type: 'text', text: 'Title' }] }],
+      content: [
+        {
+          type: 'heading',
+          attrs: { level: 2 },
+          content: [{ type: 'text', text: 'Title' }],
+        },
+      ],
     })
 
     expect(html).toBe('<h2>Title</h2>')
@@ -44,7 +52,9 @@ describe('richtextJsonToHtml', () => {
       ],
     })
 
-    expect(html).toBe('<p><a href="/a"><u><s><em><strong><code>x</code></strong></em></s></u></a></p>')
+    expect(html).toBe(
+      '<p><a href="/a"><u><s><em><strong><code>x</code></strong></em></s></u></a></p>'
+    )
   })
 
   it('renders a link with href and title', () => {
@@ -53,7 +63,13 @@ describe('richtextJsonToHtml', () => {
       content: [
         {
           type: 'paragraph',
-          content: [{ type: 'text', text: 'go', marks: [{ type: 'link', attrs: { href: '/x', title: 'X' } }] }],
+          content: [
+            {
+              type: 'text',
+              text: 'go',
+              marks: [{ type: 'link', attrs: { href: '/x', title: 'X' } }],
+            },
+          ],
         },
       ],
     })
@@ -64,7 +80,9 @@ describe('richtextJsonToHtml', () => {
   it('renders an image', () => {
     const html = richtextJsonToHtml({
       type: 'doc',
-      content: [{ type: 'image', attrs: { src: '/img.png', alt: 'a picture' } }],
+      content: [
+        { type: 'image', attrs: { src: '/img.png', alt: 'a picture' } },
+      ],
     })
 
     expect(html).toBe('<img src="/img.png" alt="a picture">')
@@ -93,7 +111,12 @@ describe('richtextJsonToHtml', () => {
           type: 'orderedList',
           attrs: { start: 3 },
           content: [
-            { type: 'listItem', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'c' }] }] },
+            {
+              type: 'listItem',
+              content: [
+                { type: 'paragraph', content: [{ type: 'text', text: 'c' }] },
+              ],
+            },
           ],
         },
       ],
@@ -105,7 +128,9 @@ describe('richtextJsonToHtml', () => {
   it('renders the children of an unknown node type, with no wrapper', () => {
     const html = richtextJsonToHtml({
       type: 'doc',
-      content: [{ type: 'mystery', content: [{ type: 'text', text: 'still here' }] }],
+      content: [
+        { type: 'mystery', content: [{ type: 'text', text: 'still here' }] },
+      ],
     })
 
     expect(html).toBe('still here')
@@ -114,7 +139,9 @@ describe('richtextJsonToHtml', () => {
   it('escapes <, >, and & in text', () => {
     const html = richtextJsonToHtml({
       type: 'doc',
-      content: [{ type: 'paragraph', content: [{ type: 'text', text: '<b> & </b>' }] }],
+      content: [
+        { type: 'paragraph', content: [{ type: 'text', text: '<b> & </b>' }] },
+      ],
     })
 
     expect(html).toBe('<p>&lt;b&gt; &amp; &lt;/b&gt;</p>')

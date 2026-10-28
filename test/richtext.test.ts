@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { detectRichtextFormat, renderRichtext, richtextToPlainText } from '../app/utils/richtext'
+import {
+  detectRichtextFormat,
+  renderRichtext,
+  richtextToPlainText,
+} from '../app/utils/richtext'
 
 describe('detectRichtextFormat', () => {
   it('treats null and blank strings as empty', () => {
@@ -26,13 +30,17 @@ describe('detectRichtextFormat', () => {
   })
 
   it('does not misdetect a markdown string that starts with "{"', () => {
-    expect(detectRichtextFormat('{not json} rest of the sentence')).toBe('markdown')
+    expect(detectRichtextFormat('{not json} rest of the sentence')).toBe(
+      'markdown'
+    )
   })
 })
 
 describe('renderRichtext', () => {
   it('renders markdown headings, lists, bold text, and code blocks', () => {
-    const html = renderRichtext('# Title\n\n- one\n- two\n\n**bold**\n\n```\ncode\n```')
+    const html = renderRichtext(
+      '# Title\n\n- one\n- two\n\n**bold**\n\n```\ncode\n```'
+    )
 
     expect(html).toContain('<h1>Title</h1>')
     expect(html).toContain('<ul>')

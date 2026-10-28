@@ -1,6 +1,13 @@
-import type { PlutoContentContext, PlutoContentItem } from '@plutocms/pluto/shared/types/content'
+import type {
+  PlutoContentContext,
+  PlutoContentItem,
+} from '@plutocms/pluto/shared/types/content'
 import { describe, expect, it } from 'vitest'
-import { cutText, POST_EXCERPT_LENGTH, postToPublic } from '../server/utils/post-public'
+import {
+  cutText,
+  POST_EXCERPT_LENGTH,
+  postToPublic,
+} from '../server/utils/post-public'
 
 const ctx = {} as PlutoContentContext
 
@@ -14,14 +21,22 @@ const item: PlutoContentItem = {
 
 describe('postToPublic', () => {
   it('drops the body from a list item and adds a plain-text excerpt', async () => {
-    const data = await postToPublic(ctx, { id: 1, title: 'Hello', content: item.content }, { view: 'list', item, batch: [item] })
+    const data = await postToPublic(
+      ctx,
+      { id: 1, title: 'Hello', content: item.content },
+      { view: 'list', item, batch: [item] }
+    )
 
     expect(data).not.toHaveProperty('content')
     expect(data.excerpt).toBe('Title Some bold text.')
   })
 
   it('keeps the body of one item and adds sanitized html', async () => {
-    const data = await postToPublic(ctx, { id: 1, title: 'Hello', content: item.content }, { view: 'item', item, batch: [item] })
+    const data = await postToPublic(
+      ctx,
+      { id: 1, title: 'Hello', content: item.content },
+      { view: 'item', item, batch: [item] }
+    )
 
     expect(data.content).toBe(item.content)
     expect(data.html).toContain('<strong>bold</strong>')
@@ -29,9 +44,21 @@ describe('postToPublic', () => {
   })
 
   it('renders Tiptap JSON too', async () => {
-    const json = { ...item, content: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'From JSON' }] }] } }
+    const json = {
+      ...item,
+      content: {
+        type: 'doc',
+        content: [
+          { type: 'paragraph', content: [{ type: 'text', text: 'From JSON' }] },
+        ],
+      },
+    }
 
-    const data = await postToPublic(ctx, { id: 1 }, { view: 'item', item: json, batch: [json] })
+    const data = await postToPublic(
+      ctx,
+      { id: 1 },
+      { view: 'item', item: json, batch: [json] }
+    )
 
     expect(data.html).toContain('From JSON')
   })

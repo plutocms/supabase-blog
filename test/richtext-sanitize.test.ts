@@ -11,7 +11,9 @@ describe('sanitizeRichtextHtml', () => {
   })
 
   it('drops onclick, onerror, and onload attributes', () => {
-    const html = sanitizeRichtextHtml('<p onclick="evil()">a</p><img src="/a.png" onerror="evil()">')
+    const html = sanitizeRichtextHtml(
+      '<p onclick="evil()">a</p><img src="/a.png" onerror="evil()">'
+    )
 
     expect(html).not.toContain('onclick')
     expect(html).not.toContain('onerror')
@@ -39,20 +41,26 @@ describe('sanitizeRichtextHtml', () => {
   })
 
   it('rejects an entity-encoded javascript: href', () => {
-    const html = sanitizeRichtextHtml('<a href="java&#115;cript:alert(1)">click</a>')
+    const html = sanitizeRichtextHtml(
+      '<a href="java&#115;cript:alert(1)">click</a>'
+    )
 
     expect(html).not.toContain('javascript:')
     expect(html.toLowerCase()).not.toContain('script:alert')
   })
 
   it('rejects a javascript: href hidden by an embedded tab', () => {
-    const html = sanitizeRichtextHtml('<a href="java&#x09;script:alert(1)">click</a>')
+    const html = sanitizeRichtextHtml(
+      '<a href="java&#x09;script:alert(1)">click</a>'
+    )
 
     expect(html).not.toContain('href')
   })
 
   it('rejects a data:image/svg+xml src, keeps a data:image/png src', () => {
-    const svg = sanitizeRichtextHtml('<img src="data:image/svg+xml,<svg onload=alert(1)>">')
+    const svg = sanitizeRichtextHtml(
+      '<img src="data:image/svg+xml,<svg onload=alert(1)>">'
+    )
     const png = sanitizeRichtextHtml('<img src="data:image/png;base64,aaaa">')
 
     expect(svg).not.toContain('data:image/svg')
@@ -60,9 +68,15 @@ describe('sanitizeRichtextHtml', () => {
   })
 
   it('keeps relative, anchor, and mailto hrefs', () => {
-    expect(sanitizeRichtextHtml('<a href="/post/x">a</a>')).toContain('href="/post/x"')
-    expect(sanitizeRichtextHtml('<a href="#anchor">a</a>')).toContain('href="#anchor"')
-    expect(sanitizeRichtextHtml('<a href="mailto:a@b.c">a</a>')).toContain('href="mailto:a@b.c"')
+    expect(sanitizeRichtextHtml('<a href="/post/x">a</a>')).toContain(
+      'href="/post/x"'
+    )
+    expect(sanitizeRichtextHtml('<a href="#anchor">a</a>')).toContain(
+      'href="#anchor"'
+    )
+    expect(sanitizeRichtextHtml('<a href="mailto:a@b.c">a</a>')).toContain(
+      'href="mailto:a@b.c"'
+    )
   })
 
   it('keeps a language- class on code, drops any other class', () => {
@@ -84,7 +98,9 @@ describe('sanitizeRichtextHtml', () => {
   })
 
   it('keeps a task-list checkbox', () => {
-    const html = sanitizeRichtextHtml('<li><input type="checkbox" checked disabled>done</li>')
+    const html = sanitizeRichtextHtml(
+      '<li><input type="checkbox" checked disabled>done</li>'
+    )
 
     expect(html).toContain('type="checkbox"')
     expect(html).toContain('checked')
@@ -103,7 +119,9 @@ describe('sanitizeRichtextHtml', () => {
   })
 
   it('escapes a quote inside a kept attribute value, so it cannot break out', () => {
-    const html = sanitizeRichtextHtml('<img src="/a.png" alt=\'x" onerror="alert(1)\'>')
+    const html = sanitizeRichtextHtml(
+      '<img src="/a.png" alt=\'x" onerror="alert(1)\'>'
+    )
 
     // The quote is escaped, so "onerror" stays inert text inside `alt`
     // instead of starting a new, live attribute.

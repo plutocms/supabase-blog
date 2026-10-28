@@ -19,7 +19,7 @@ export function usePostEditorItems() {
 
   function createBlockMenuItemTree(
     editor: Editor,
-    selectedNode: { node: JSONContent, pos: number }
+    selectedNode: { node: JSONContent; pos: number }
   ) {
     return createItemTree(t, editor, selectedNode)
   }

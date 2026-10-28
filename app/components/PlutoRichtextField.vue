@@ -20,13 +20,21 @@ const value = computed(() => (props.modelValue as string | undefined) ?? '')
 </script>
 
 <template>
-  <UFormField :label="field.label" :description="field.description" :required="field.required">
+  <UFormField
+    :label="field.label"
+    :description="field.description"
+    :required="field.required"
+  >
     <!-- PostEditor.vue has no disabled state of its own. Dim and block
          input instead of forwarding an unsupported prop. -->
     <div :class="disabled ? 'pointer-events-none opacity-60' : undefined">
       <PostEditor
         :model-value="value"
-        :placeholder="t('supabase-blog.editor.fieldPlaceholder', { label: field.label.toLowerCase() })"
+        :placeholder="
+          t('supabase-blog.editor.fieldPlaceholder', {
+            label: field.label.toLowerCase(),
+          })
+        "
         @update:model-value="emit('update:modelValue', $event)"
       />
     </div>

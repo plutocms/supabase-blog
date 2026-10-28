@@ -108,7 +108,7 @@ describe('supabase-blog locale files', () => {
 
 // `status` is `false | PlutoContentStatus`. The post type always has one.
 function statusValues(type: { status?: unknown }) {
-  return (type.status as { values: { label: string, value: string }[] }).values
+  return (type.status as { values: { label: string; value: string }[] }).values
 }
 
 describe('content.post keys', () => {

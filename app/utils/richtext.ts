@@ -55,16 +55,23 @@ export function detectRichtextFormat(value: unknown): RichtextFormat | 'empty' {
 
   if (trimmed.startsWith('{')) {
     const parsed = safeParseJson(trimmed)
-    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed) && (parsed as { type?: unknown }).type === 'doc') {
+    if (
+      parsed &&
+      typeof parsed === 'object' &&
+      !Array.isArray(parsed) &&
+      (parsed as { type?: unknown }).type === 'doc'
+    ) {
       return 'json'
     }
     // Parses (or fails to parse) as something other than a Tiptap
     // document — do not misdetect it as JSON content.
   }
 
-  const looksLikeHtml
-    = STARTS_WITH_TAG.test(trimmed)
-      && (HAS_CLOSING_TAG.test(trimmed) || HAS_VOID_TAG.test(trimmed) || HAS_SELF_CLOSING_TAG.test(trimmed))
+  const looksLikeHtml =
+    STARTS_WITH_TAG.test(trimmed) &&
+    (HAS_CLOSING_TAG.test(trimmed) ||
+      HAS_VOID_TAG.test(trimmed) ||
+      HAS_SELF_CLOSING_TAG.test(trimmed))
 
   if (looksLikeHtml) {
     return 'html'
@@ -89,7 +96,10 @@ function safeParseJson(value: string): unknown {
  * `sanitizeRichtextHtml` before it is returned, no matter which path
  * produced it — see `app/utils/richtext-sanitize.ts`.
  */
-export function renderRichtext(value: unknown, format: RichtextFormat | 'auto' = 'auto'): string {
+export function renderRichtext(
+  value: unknown,
+  format: RichtextFormat | 'auto' = 'auto'
+): string {
   const resolved = format === 'auto' ? detectRichtextFormat(value) : format
 
   let html: string
@@ -121,7 +131,10 @@ export function renderRichtext(value: unknown, format: RichtextFormat | 'auto' =
  * result — truncating to a length is the caller's job (see `blog.vue`'s
  * `excerpt()` in the template for an example).
  */
-export function richtextToPlainText(value: unknown, format: RichtextFormat | 'auto' = 'auto'): string {
+export function richtextToPlainText(
+  value: unknown,
+  format: RichtextFormat | 'auto' = 'auto'
+): string {
   const html = renderRichtext(value, format)
 
   if (!html) {
@@ -150,17 +163,23 @@ const NAMED_TEXT_ENTITIES: Record<string, string> = {
   lt: '<',
   gt: '>',
   quot: '"',
-  apos: '\'',
+  apos: "'",
   nbsp: ' ',
 }
 
 function decodeEntities(value: string): string {
-  return value.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (match, body: string) => {
-    if (body[0] === '#') {
-      const isHex = body[1] === 'x' || body[1] === 'X'
-      const codePoint = Number.parseInt(isHex ? body.slice(2) : body.slice(1), isHex ? 16 : 10)
-      return Number.isNaN(codePoint) ? match : String.fromCodePoint(codePoint)
+  return value.replace(
+    /&(#x[0-9a-f]+|#\d+|[a-z]+);/gi,
+    (match, body: string) => {
+      if (body[0] === '#') {
+        const isHex = body[1] === 'x' || body[1] === 'X'
+        const codePoint = Number.parseInt(
+          isHex ? body.slice(2) : body.slice(1),
+          isHex ? 16 : 10
+        )
+        return Number.isNaN(codePoint) ? match : String.fromCodePoint(codePoint)
+      }
+      return NAMED_TEXT_ENTITIES[body] ?? match
     }
-    return NAMED_TEXT_ENTITIES[body] ?? match
-  })
+  )
 }

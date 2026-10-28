@@ -21,7 +21,9 @@ describe('postType', () => {
   it('titleField names a real field', async () => {
     const { postType } = await import('../shared/utils/content-post')
 
-    expect(postType.fields.some((field) => field.name === postType.titleField)).toBe(true)
+    expect(
+      postType.fields.some((field) => field.name === postType.titleField)
+    ).toBe(true)
   })
 
   it('slug.field names a field of type "slug"', async () => {
@@ -30,7 +32,9 @@ describe('postType', () => {
     expect(postType.slug).not.toBe(false)
 
     const slug = postType.slug as { field: string }
-    const field = postType.fields.find((candidate) => candidate.name === slug.field)
+    const field = postType.fields.find(
+      (candidate) => candidate.name === slug.field
+    )
 
     expect(field?.type).toBe('slug')
   })

@@ -41,8 +41,23 @@ export const postType = defineContentType({
   source: 'posts',
   titleField: 'title',
   fields: [
-    { name: 'title', type: 'text', label: 'Title', required: true, inList: true, region: 'main' },
-    { name: 'slug', type: 'slug', label: 'Slug', from: 'title', preview: '/post/', inList: true, region: 'side' },
+    {
+      name: 'title',
+      type: 'text',
+      label: 'Title',
+      required: true,
+      inList: true,
+      region: 'main',
+    },
+    {
+      name: 'slug',
+      type: 'slug',
+      label: 'Slug',
+      from: 'title',
+      preview: '/post/',
+      inList: true,
+      region: 'side',
+    },
     { name: 'content', type: 'richtext', label: 'Content', region: 'main' },
   ],
   slug: { field: 'slug' },
@@ -61,7 +76,11 @@ export const postType = defineContentType({
     ],
   },
   timestamps: { created: 'created_at', updated: 'updated_at' },
-  capabilities: { read: 'posts:read_drafts', write: 'posts:publish', delete: 'posts:delete' },
+  capabilities: {
+    read: 'posts:read_drafts',
+    write: 'posts:publish',
+    delete: 'posts:delete',
+  },
   autoRoutes: false,
   // The public API (`/api/pluto/v1/content/post`): published posts only. The server hook
   // `toPublic` (server/utils/post-public.ts) adds `excerpt` to a list item and `html` to one item.
