@@ -17,32 +17,28 @@ afterEach(() => {
   vi.unstubAllGlobals()
   delete process.env.PLUTO_SUPABASE_PATH
   delete process.env.PLUTO_SUPABASE_STORAGE_PATH
-  delete process.env.PLUTO_UI_PATH
   vi.resetModules()
 })
 
-describe('supabase, supabase-storage, and ui layer resolution', () => {
+describe('supabase and supabase-storage layer resolution', () => {
   it('defaults every layer to its published npm package when unset', async () => {
     delete process.env.PLUTO_SUPABASE_PATH
     delete process.env.PLUTO_SUPABASE_STORAGE_PATH
-    delete process.env.PLUTO_UI_PATH
 
     const { default: config } = await import('../nuxt.config')
 
     expect(config.extends).toEqual([
       '@plutocms/supabase',
       '@plutocms/supabase-storage',
-      '@plutocms/ui',
     ])
   })
 
   it('honors the env var overrides when set', async () => {
     process.env.PLUTO_SUPABASE_PATH = '../supabase'
     process.env.PLUTO_SUPABASE_STORAGE_PATH = '../supabase-storage'
-    process.env.PLUTO_UI_PATH = '../ui'
 
     const { default: config } = await import('../nuxt.config')
 
-    expect(config.extends).toEqual(['../supabase', '../supabase-storage', '../ui'])
+    expect(config.extends).toEqual(['../supabase', '../supabase-storage'])
   })
 })
