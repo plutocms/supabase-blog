@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.15.0](https://github.com/plutocms/supabase-blog/compare/v0.14.0...v0.15.0) (2026-10-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* **post:** edit posts in the core post editor; the public post path is /posts/<slug> ([#69](https://github.com/plutocms/supabase-blog/issues/69))
+
+### Features
+
+* **post:** edit posts in the core post editor; the public post path is /posts/&lt;slug&gt; ([#69](https://github.com/plutocms/supabase-blog/issues/69)) ([e2c0623](https://github.com/plutocms/supabase-blog/commit/e2c062347d72d0529d98cb0187b52e393ab88694))
+
 ## [0.14.0](https://github.com/plutocms/supabase-blog/compare/v0.13.1...v0.14.0) (2026-10-28)
 
 
