@@ -69,6 +69,12 @@ export const postType = defineContentType({
     },
   ],
   slug: { field: 'slug' },
+  // The "View Post" link of the form: the post page of the Supabase blog
+  // template (`pages/post/[slug].vue`). A draft has no public page.
+  previewUrl: (item) =>
+    item.status === 'published' && typeof item.slug === 'string' && item.slug
+      ? `/post/${item.slug}`
+      : undefined,
   // The canvas layout: the body fills the center, the outline is on the left,
   // and the other fields are in the panel on the right.
   form: {
