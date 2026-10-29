@@ -54,17 +54,37 @@ export const postType = defineContentType({
       type: 'slug',
       label: 'Slug',
       from: 'title',
-      preview: '/post/',
+      preview: '/posts/',
       inList: true,
       region: 'side',
     },
-    { name: 'content', type: 'richtext', label: 'Content', region: 'main' },
+    {
+      name: 'content',
+      type: 'richtext',
+      label: 'Content',
+      region: 'main',
+      // The core post editor: the rich text editor (Visual), or the Markdown
+      // source next to a preview of the site (Markdown), with an outline.
+      widget: 'post-canvas',
+    },
   ],
   slug: { field: 'slug' },
-  // Keep the post editor a clean writing surface. The focus layout drops the
-  // heading and the container padding. The slug sidebar starts closed. The
-  // toolbar button opens it.
-  form: { layout: 'focus', aside: true, asideCollapsed: true, width: 'full' },
+  // The "View Post" link of the form: the post page of the Supabase blog
+  // template (`pages/posts/[slug].vue`). A draft has no public page.
+  previewUrl: (item) =>
+    item.status === 'published' && typeof item.slug === 'string' && item.slug
+      ? `/posts/${item.slug}`
+      : undefined,
+  // The canvas layout: the body fills the center, the outline is on the left,
+  // and the other fields are in the panel on the right.
+  form: {
+    layout: 'canvas',
+    canvasField: 'content',
+    leftPanel: {
+      label: 'pluto.post.outline',
+      class: 'bg-white dark:bg-[#0b0b0b]',
+    },
+  },
   status: {
     column: 'status',
     default: 'draft',

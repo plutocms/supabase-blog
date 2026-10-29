@@ -12,7 +12,7 @@ typography the editor itself uses.
 
 `pluto-supabase-blog-template` uses it in two places:
 
-- `app/pages/post/[slug].vue` — the full post body.
+- `app/pages/posts/[slug].vue` — the full post body.
 - `app/pages/blog.vue` — by way of `richtextToPlainText()`, to build a plain-text excerpt for
   the post list.
 
