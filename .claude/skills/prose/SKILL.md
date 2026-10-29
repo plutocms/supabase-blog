@@ -10,11 +10,10 @@ page. It is the read side of `PostEditor.vue`: the editor writes markdown (see t
 `blog-posts` skill), and `PlutoProse` renders that markdown back as real HTML, with the same
 typography the editor itself uses.
 
-`pluto-supabase-blog-template` uses it in two places:
-
-- `app/pages/posts/[slug].vue` — the full post body.
-- `app/pages/blog.vue` — by way of `richtextToPlainText()`, to build a plain-text excerpt for
-  the post list.
+Use it in app code that holds the raw stored value. A page that reads the public API
+(`usePlutoPublicItem`) gets the body as sanitized `html` already, and renders it with
+`PlutoHtml` from `@plutocms/pluto`, not `PlutoProse`. `pluto-blog-template` does that, for both
+backends.
 
 ## The pipeline
 
