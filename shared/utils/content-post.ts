@@ -108,4 +108,7 @@ export const postType = defineContentType({
   basePath: '/admin/posts',
   newPath: '/admin/post/new',
   editPath: (id) => `/admin/post/edit/${id}`,
+  // "New Post" in the admin bar, and "Edit Post" on a post page that calls
+  // `usePlutoEditLink('post', post.id)`. The id, not the slug: a save matches the id.
+  adminBar: true,
 })
