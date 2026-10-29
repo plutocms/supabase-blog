@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.3](https://github.com/plutocms/supabase-blog/compare/v0.15.2...v0.15.3) (2026-10-29)
+
+
+### Bug Fixes
+
+* **deps:** accept every 0.x version of the [@plutocms](https://github.com/plutocms) packages; shared CI and the update workflow ([#77](https://github.com/plutocms/supabase-blog/issues/77)) ([f650239](https://github.com/plutocms/supabase-blog/commit/f65023920c07f18ab961fde5cf3adc95f6a26514))
+
 ## [0.15.2](https://github.com/plutocms/supabase-blog/compare/v0.15.1...v0.15.2) (2026-10-29)
 
 
