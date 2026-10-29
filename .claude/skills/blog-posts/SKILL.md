@@ -16,7 +16,7 @@ columns:
 - `id` — bigint. The primary key. The database generates it.
 - `created_at` — timestamptz. The database sets it when a row is created.
 - `updated_at` — timestamptz. The API sets it on every create and edit.
-- `slug` — text. Unique. It forms the public post path, `/post/<slug>`.
+- `slug` — text. Unique. It forms the public post path, `/posts/<slug>`.
 - `title` — text. Required.
 - `content` — text. The post body, in markdown. It can hold inline images.
 - `status` — text. Either `draft` or `published`. The default is `draft`.

@@ -45,5 +45,5 @@ The `package.json` of the app lists only `@plutocms/supabase-blog`, besides `nux
 
 ## Links
 
-- Starter: [`pluto-supabase-blog-template`](https://github.com/plutocms/pluto-supabase-blog-template), with public `blog` and `post/[slug]` pages.
+- Starter: [`pluto-supabase-blog-template`](https://github.com/plutocms/pluto-supabase-blog-template), with public `blog` and `posts/[slug]` pages.
 - Skills: `.claude/skills/blog-posts/SKILL.md` and `.claude/skills/prose/SKILL.md`.

@@ -33,7 +33,7 @@ const items = computed<NavbarAction[]>(() => [
       ('slug' in route.params && route.params.slug) ||
       ''
     }`,
-    show: route.path.startsWith('/post/') && can('posts:publish'),
+    show: route.path.startsWith('/posts/') && can('posts:publish'),
   },
 ])
 </script>
