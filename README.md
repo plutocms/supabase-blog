@@ -45,5 +45,5 @@ The `package.json` of the app lists only `@plutocms/supabase-blog`, besides `nux
 
 ## Links
 
-- Starter: [`pluto-supabase-blog-template`](https://github.com/plutocms/pluto-supabase-blog-template), with public `blog` and `posts/[slug]` pages.
+- Starter: the blog template, [`pluto-blog-template`](https://github.com/plutocms/pluto-blog-template), with the Supabase backend: `npm create pluto@latest my-blog -t blog --backend supabase`. The same template works with the GitHub CMS.
 - Skills: `.claude/skills/blog-posts/SKILL.md` and `.claude/skills/prose/SKILL.md`.
