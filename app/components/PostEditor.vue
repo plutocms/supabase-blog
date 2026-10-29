@@ -309,7 +309,7 @@ provide('editorHandlers', handlers)
       <EditorToolbar
         :editor="editor"
         :items="fixedToolbarItems"
-        class="border-b border-muted sticky top-0 inset-x-0 px-8 py-2 z-10 bg-default flex-wrap"
+        class="border-b border-muted sticky top-0 inset-x-0 p-2 z-10 bg-default flex-wrap"
       >
         <template #link>
           <EditorLinkPopover :editor="editor" auto-open />

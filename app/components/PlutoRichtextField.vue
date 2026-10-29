@@ -7,7 +7,8 @@
 //
 // With `canvas`, the core post editor (`post-canvas`) shows this widget as its
 // Visual mode: no label, and a full-height box that scrolls its own text, like
-// the Markdown mode of the post editor.
+// the Markdown mode of the post editor. No padding: the post editor sets the
+// space around it.
 const props = defineProps<{
   field: PlutoTextField
   modelValue: unknown
@@ -26,7 +27,7 @@ const value = computed(() => (props.modelValue as string | undefined) ?? '')
 const UFormField = resolveComponent('UFormField')
 const frame = computed(() =>
   props.canvas
-    ? { is: 'div', attrs: { class: 'flex h-full min-h-0 flex-col p-4' } }
+    ? { is: 'div', attrs: { class: 'flex h-full min-h-0 flex-col' } }
     : {
         is: UFormField,
         attrs: {
