@@ -1,12 +1,12 @@
 # Blog layer for Pluto with Supabase
 
-This layer adds a blog to Pluto. It stores posts in Supabase. Editors write them in the Pluto admin with a rich text editor. The layer builds on [`@plutocms/supabase`](https://github.com/plutocms/supabase) and `@plutocms/supabase-storage`.
+This layer adds a blog to Pluto. It stores posts in Supabase. Editors write them in the Pluto admin with a rich text editor. The layer builds on [`@plutocms/supabase`](https://github.com/plutocms/supabase).
 
 ## What the layer gives
 
 - **Post admin:** list, create, edit and delete posts at `/admin/posts`, `/admin/post/new` and `/admin/post/edit/:id`. The pages run on the generic content UI of `@plutocms/pluto`, against the `post` content type.
 - **Rich text editor:** a Tiptap editor that stores Markdown. It runs in the core post editor: a Visual mode, a Markdown mode with a preview of the site, an outline of the headings, and draft/publish controls.
-- **Inline images:** an editor can pick an existing file or upload a new one. The upload uses the media library of `@plutocms/supabase-storage`.
+- **Images:** a cover image, and inline images in the body. The editor picks a file or uploads one, through the media library of `@plutocms/pluto` (stored in Supabase Storage).
 - **Capabilities:** `posts:read_drafts`, `posts:publish` and `posts:delete` gate the actions. An admin holds all three.
 - **Public data:** the published posts on the public API of Pluto, for a site in any stack: `GET /api/pluto/v1/content/post` and `GET /api/pluto/v1/content/post/<id or slug>`. A list item has an `excerpt`, and one post has its body as sanitized `html`. In Nuxt, use `usePlutoPublicList` and `usePlutoPublicItem`. See https://pluto.vulmix.dev/core/public-api.
 - **`PlutoProse`:** a component that shows a stored richtext value (Markdown, HTML or Tiptap JSON) as sanitized, styled HTML. Use it on a public post page.
@@ -21,7 +21,7 @@ For the full detail, see [FEATURES.md](./FEATURES.md).
 
 ## Installation
 
-Install the layer. It brings `@plutocms/supabase` (and with it `@plutocms/pluto`), `@plutocms/supabase-storage`. Your app extends only this layer.
+Install the layer. It brings `@plutocms/supabase` (and with it `@plutocms/pluto`). Your app extends only this layer.
 
 ```bash
 # npm

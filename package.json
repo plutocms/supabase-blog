@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "@plutocms/supabase": ">=0.15.4 <1.0.0",
-    "@plutocms/supabase-storage": ">=0.13.4 <1.0.0",
     "@tiptap/core": "^3.32.0",
     "@tiptap/extension-code": "^3.32.0",
     "@tiptap/extension-image": "^3.32.0",
@@ -60,7 +59,6 @@
     "@parcel/watcher",
     "@plutocms/pluto",
     "@plutocms/supabase",
-    "@plutocms/supabase-storage",
     "@plutocms/utils",
     "esbuild",
     "supabase",

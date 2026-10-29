@@ -32,7 +32,7 @@ const {
 
 const value = defineModel<string>({ default: '' })
 
-const { getMediaUrl } = useMedia()
+// The image command opens the media picker of core (images only).
 const isMediaModalOpen = ref(false)
 
 const customHandlers = {
@@ -48,7 +48,6 @@ const customHandlers = {
   },
 } satisfies EditorCustomHandlers
 
-type MediaItem = Database['public']['Tables']['media']['Row']
 
 function imageToolbarItems(editor: Editor): EditorToolbarItem[][] {
   const node = editor.state.doc.nodeAt(editor.state.selection.from)
@@ -248,23 +247,17 @@ const editor = useEditor({
   },
 })
 
-function onInsertMedia(event: MediaItem | MediaItem[] | null) {
-  if (!event) {
+function onInsertMedia(chosen: PlutoMedia[]) {
+  const [image] = chosen
+
+  if (!image) {
     return
   }
-
-  const item = Array.isArray(event) ? event[0] : event
-
-  if (!item) {
-    return
-  }
-
-  const src = getMediaUrl(item.name)
 
   editor.value
     ?.chain()
     .focus()
-    .setImage({ src, alt: item.alt ?? undefined })
+    .setImage({ src: image.url, alt: image.alt || undefined })
     .run()
 
   isMediaModalOpen.value = false
@@ -429,5 +422,9 @@ const MENU_BG = 'dark:bg-neutral-950'
     </UTheme>
   </div>
 
-  <UploadMedia v-model="isMediaModalOpen" @insert="onInsertMedia" />
+  <PlutoMediaPicker
+    v-model:open="isMediaModalOpen"
+    :accept="['image/*']"
+    @select="onInsertMedia"
+  />
 </template>

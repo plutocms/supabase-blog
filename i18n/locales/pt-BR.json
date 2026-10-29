@@ -80,6 +80,9 @@
         "slug": {
           "label": "Slug"
         },
+        "cover": {
+          "label": "Imagem de capa"
+        },
         "content": {
           "label": "Conteúdo"
         }
