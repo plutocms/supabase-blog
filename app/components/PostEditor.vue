@@ -301,11 +301,22 @@ watch(locale, () => {
 
 const handlers = computed(() => ({ ...createHandlers(), ...customHandlers }))
 provide('editorHandlers', handlers)
+
+// The menus (the bubble toolbars, the dropdowns, the slash and block menus)
+// open on top of the editor, which has the same background in dark mode. A
+// darker background sets them apart.
+const MENU_BG = 'dark:bg-neutral-950'
 </script>
 
 <template>
   <div :class="ui.root({ class: props.ui?.root })">
-    <template v-if="editor">
+    <UTheme
+      v-if="editor"
+      :ui="{
+        dropdownMenu: { content: MENU_BG },
+        popover: { content: MENU_BG },
+      }"
+    >
       <EditorToolbar
         :editor="editor"
         :items="fixedToolbarItems"
@@ -328,6 +339,7 @@ provide('editorHandlers', handlers)
             return view.hasFocus() && !selection.empty
           }
         "
+        :ui="{ base: MENU_BG }"
         layout="bubble"
       >
         <template #link>
@@ -343,6 +355,7 @@ provide('editorHandlers', handlers)
             return editor.isActive('image') && view.hasFocus()
           }
         "
+        :ui="{ base: MENU_BG }"
         layout="bubble"
       />
 
@@ -380,7 +393,7 @@ provide('editorHandlers', handlers)
           :modal="false"
           :items="blockMenuItems"
           :content="{ side: 'left' }"
-          :ui="{ content: 'w-48', label: 'text-xs' }"
+          :ui="{ content: `w-48 ${MENU_BG}`, label: 'text-xs' }"
           @update:open="
             (isOpen) => {
               if (!editor) return
@@ -401,7 +414,11 @@ provide('editorHandlers', handlers)
         </UDropdownMenu>
       </UEditorDragHandle>
 
-      <UEditorSuggestionMenu :editor="editor" :items="suggestionItems" />
+      <UEditorSuggestionMenu
+        :editor="editor"
+        :items="suggestionItems"
+        :ui="{ content: MENU_BG }"
+      />
 
       <EditorContent
         :editor="editor"
@@ -409,7 +426,7 @@ provide('editorHandlers', handlers)
         role="presentation"
         data-slot="content"
       />
-    </template>
+    </UTheme>
   </div>
 
   <UploadMedia v-model="isMediaModalOpen" @insert="onInsertMedia" />
