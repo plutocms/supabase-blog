@@ -39,12 +39,15 @@ const html = computed(() =>
        `v-html`), compiles correctly on both server and client. Verified
        against `@vue/compiler-sfc`'s own SSR codegen output for all three
        forms — do not "fix" this back to either one. -->
-  <!-- eslint-disable-next-line vue/attribute-hyphenation -- must stay camelCase, see comment above -->
+  <!-- A block disable, not `disable-next-line`: the attribute is not on the next line, and
+       `eslint --fix` hyphenated it once. test/prose-binding.test.ts checks the spelling. -->
+  <!-- eslint-disable vue/attribute-hyphenation -- must stay camelCase, see comment above -->
   <component
     :is="tag ?? 'div'"
     v-if="html"
     :class="ui.base({ class: props.class })"
-    :inner-h-t-m-l="html"
+    :innerHTML="html"
   />
+  <!-- eslint-enable vue/attribute-hyphenation -->
   <slot v-else name="empty" />
 </template>
