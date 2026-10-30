@@ -1,7 +1,7 @@
 import type {
   PlutoContentContext,
   PlutoContentItem,
-} from '@plutocms/pluto/shared/types/content'
+} from '@plutocms/core/shared/types/content'
 import { describe, expect, it } from 'vitest'
 import {
   cutText,
