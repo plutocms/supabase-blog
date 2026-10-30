@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.16.0](https://github.com/plutocms/supabase-blog/compare/v0.15.3...v0.16.0) (2026-10-30)
+
+
+### Features
+
+* New Post and Edit Post in the admin bar ([#89](https://github.com/plutocms/supabase-blog/issues/89)) ([097372c](https://github.com/plutocms/supabase-blog/commit/097372ca2430966ec993b9a9ba61db974af80223))
+
 ## [0.15.3](https://github.com/plutocms/supabase-blog/compare/v0.15.2...v0.15.3) (2026-10-29)
 
 
