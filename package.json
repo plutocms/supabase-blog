@@ -27,7 +27,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@plutocms/supabase": ">=0.16.0 <1.0.0",
+    "@plutocms/supabase": ">=0.18.0 <1.0.0",
     "@tiptap/core": "^3.32.0",
     "@tiptap/extension-code": "^3.32.0",
     "@tiptap/extension-image": "^3.32.0",
@@ -42,7 +42,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^9.5.1",
     "@nuxt/eslint": "^1.17.0",
-    "@plutocms/pluto": ">=0.35.0 <1.0.0",
+    "@plutocms/core": ">=0.38.0 <1.0.0",
     "@types/bun": "^1.4.3",
     "eslint": "^10.13.0",
     "eslint-config-prettier": "^10.1.8",
@@ -57,7 +57,7 @@
   },
   "trustedDependencies": [
     "@parcel/watcher",
-    "@plutocms/pluto",
+    "@plutocms/core",
     "@plutocms/supabase",
     "@plutocms/utils",
     "esbuild",

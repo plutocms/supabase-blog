@@ -1,9 +1,9 @@
 // The `post` content type. It maps onto the `posts` table columns from
 // `db/migrations/001_baseline.sql`: id, created_at, updated_at, slug,
 // title, content, status, published_at. See the content-model skill in
-// `@plutocms/pluto` for the full field/status/timestamp contract.
+// `@plutocms/core` for the full field/status/timestamp contract.
 //
-// `defineContentType` and the field types come from `@plutocms/pluto`'s
+// `defineContentType` and the field types come from `@plutocms/core`'s
 // `shared/utils`/`shared/types`, auto-imported the same way every other
 // shared/utils export is across this layer (see, for example,
 // `definePlutoExtension` in `app/plugins/pluto-extension.ts`). This file
@@ -60,7 +60,7 @@ export const postType = defineContentType({
     },
     // The cover: the id of a file of the core media library (the `posts.cover`
     // column). The public API gives the record. See the media skill of
-    // `@plutocms/pluto`.
+    // `@plutocms/core`.
     {
       name: 'cover',
       type: 'media',

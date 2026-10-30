@@ -52,7 +52,7 @@ engine discovers, applies, and records migrations. This layer's migration files,
 ## The public API
 
 The layer has no route of its own. The public site, in Nuxt or in any other stack, reads posts
-through core's public API (see "The public API" in the content-model skill of `@plutocms/pluto`):
+through core's public API (see "The public API" in the content-model skill of `@plutocms/core`):
 
 - `GET /api/pluto/v1/content/post` — the published posts, `{ data, meta: { total, limit, offset } }`.
   Query: `limit`, `offset`, `search`, `sort` (`-publishedAt`, `title`, …), `filter[slug]`.
@@ -75,7 +75,7 @@ UI: the `post` content type" below).
 ## The admin UI: the `post` content type
 
 `/admin/posts`, `/admin/post/new`, and `/admin/post/edit/:id` no longer run hand-written pages
-and forms. They run `@plutocms/pluto`'s generic content-model admin UI, against one content
+and forms. They run `@plutocms/core`'s generic content-model admin UI, against one content
 type declared in `shared/utils/content-post.ts`:
 
 - `app/pages/admin/posts.vue` renders `<PlutoContentList type="post" />`.
@@ -86,7 +86,7 @@ type declared in `shared/utils/content-post.ts`:
 workflow (`draft`/`published`, stamping `published_at` the first time a post is published), the
 `created_at`/`updated_at` timestamps, and the three capabilities above. It sets
 `autoRoutes: false` and explicit `basePath`/`newPath`/`editPath` values, so the URLs above never
-changed — see `@plutocms/pluto`'s content-model skill for what every field on a content type
+changed — see `@plutocms/core`'s content-model skill for what every field on a content type
 means, and `@plutocms/supabase`'s content-adapter skill for how a content type maps onto a real
 table.
 
@@ -138,7 +138,7 @@ features. Text Align was removed too — it was a toolbar button that never work
 
 The `post` content type sets `form: { layout: 'canvas', canvasField: 'content', leftPanel: {
 label: 'pluto.post.outline', … } }`, and the `content` field sets `widget: 'post-canvas'`. The
-`post-canvas` widget is the core post editor of `@plutocms/pluto`:
+`post-canvas` widget is the core post editor of `@plutocms/core`:
 
 - **Visual** mode shows the `richtext` widget of this layer (`PlutoRichtextField.vue`, which
   wraps `PostEditor.vue`) with the `canvas` prop. In canvas, the wrapper has no label, and the
@@ -152,7 +152,7 @@ label: 'pluto.post.outline', … } }`, and the `content` field sets `widget: 'po
 - The form's toolbar shows the post status (Draft or Published), Save draft or Update, Publish,
   and an overflow menu with Unpublish and Delete. Publish uses the `posts:publish` capability.
 
-`@plutocms/pluto`'s `admin-view-chrome` and `github-cms` skills describe the canvas layout and
+`@plutocms/core`'s `admin-view-chrome` and `github-cms` skills describe the canvas layout and
 the post editor. This layer only sets the config and gives the `canvas` prop to its widget.
 
 The editor's sticky toolbar uses `z-10`, not `z-50`. The admin navbar uses `z-50`. The editor
@@ -161,7 +161,7 @@ toolbar must stay below page-level chrome.
 ## Images
 
 A post body can hold inline images, and a post has a cover. Both use the media library of core
-(the media skill of `@plutocms/pluto`), with the Supabase driver of `@plutocms/supabase`:
+(the media skill of `@plutocms/core`), with the Supabase driver of `@plutocms/supabase`:
 
 1. The image button of the toolbar, or the "Image" entry of the suggestion menu, runs the
    `imageUpload` custom handler of `PostEditor.vue`. It opens `PlutoMediaPicker` (images only).
@@ -176,7 +176,7 @@ API gives the record (`url`, `width`, `height`, `alt`) in place of the id.
 
 ## Translation
 
-The admin text of this layer uses the i18n system of `@plutocms/pluto` (see the `i18n` skill
+The admin text of this layer uses the i18n system of `@plutocms/core` (see the `i18n` skill
 in `pluto`). The shipped languages are `en` and `pt-BR`. The English text is the same, byte for
 byte, as before.
 
