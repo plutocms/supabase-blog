@@ -57,6 +57,12 @@ describe('postType', () => {
     expect(status.values.length).toBeGreaterThan(0)
   })
 
+  it('asks for both admin bar buttons', async () => {
+    const { postType } = await import('../shared/utils/content-post')
+
+    expect(postType.adminBar).toBe(true)
+  })
+
   it('defines with no console warnings', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
 
