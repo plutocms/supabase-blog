@@ -158,22 +158,21 @@ the post editor. This layer only sets the config and gives the `canvas` prop to 
 The editor's sticky toolbar uses `z-10`, not `z-50`. The admin navbar uses `z-50`. The editor
 toolbar must stay below page-level chrome.
 
-## Image upload
+## Images
 
-A post body can hold inline images. The path from click to inserted image:
+A post body can hold inline images, and a post has a cover. Both use the media library of core
+(the media skill of `@plutocms/pluto`), with the Supabase driver of `@plutocms/supabase`:
 
-1. The editor toolbar's image button, or the suggestion menu's "Image" entry, opens the
-   `imageUpload` custom handler in `PostEditor.vue`.
-2. The handler opens the `UploadMedia` modal (`isMediaModalOpen.value = true`) instead of
-   inserting a node directly.
-3. Inside the modal, the editor either picks an existing file or uploads a new one. A new
-   upload posts to `POST /api/media/new` (in the `supabase-storage` layer), which stores the
-   file and inserts a `media` row.
-4. The modal emits `insert` with the chosen media row (or rows).
-5. `PostEditor.vue`'s `onInsertMedia` handler builds the public URL with
-   `useMedia().getMediaUrl(name)`, then calls
-   `editor.chain().focus().setImage({ src, alt }).run()` to insert the image into the post
-   body.
+1. The image button of the toolbar, or the "Image" entry of the suggestion menu, runs the
+   `imageUpload` custom handler of `PostEditor.vue`. It opens `PlutoMediaPicker` (images only).
+2. In the picker, the editor picks a file or uploads one. The browser makes a photo WebP (at
+   most 2400 px, no metadata), and core checks it on the server.
+3. `onInsertMedia` gets the chosen records and inserts the first one:
+   `editor.chain().focus().setImage({ src: image.url, alt: image.alt }).run()`.
+
+The `cover` field (`type: 'media'`, `accept: ['image/*']`) stores the id of a media record in
+`posts.cover` (`db/migrations/005_post_cover.sql`). The core `media` widget edits it. The public
+API gives the record (`url`, `width`, `height`, `alt`) in place of the id.
 
 ## Translation
 

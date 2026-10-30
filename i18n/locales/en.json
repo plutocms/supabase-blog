@@ -80,6 +80,9 @@
         "slug": {
           "label": "Slug"
         },
+        "cover": {
+          "label": "Cover image"
+        },
         "content": {
           "label": "Content"
         }

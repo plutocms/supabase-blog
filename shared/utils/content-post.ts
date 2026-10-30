@@ -58,6 +58,16 @@ export const postType = defineContentType({
       inList: true,
       region: 'side',
     },
+    // The cover: the id of a file of the core media library (the `posts.cover`
+    // column). The public API gives the record. See the media skill of
+    // `@plutocms/pluto`.
+    {
+      name: 'cover',
+      type: 'media',
+      label: 'Cover image',
+      accept: ['image/*'],
+      region: 'side',
+    },
     {
       name: 'content',
       type: 'richtext',
